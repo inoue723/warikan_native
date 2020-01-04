@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/sign_in/sign_in_form.dart';
 
 class SignInPage extends StatelessWidget {
-  SignInPage({@required this.auth});
-  final AuthBase auth;
-
   @override
   Widget build(BuildContext context) {
     var scaffold = Scaffold(
@@ -28,7 +24,7 @@ class SignInPage extends StatelessWidget {
           SizedBox(height: 8.0),
           SingleChildScrollView(
             child: Card(
-              child: SignInForm(auth: auth),
+              child: SignInForm(),
             ),
           ),
         ],

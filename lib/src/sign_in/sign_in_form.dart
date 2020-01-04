@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
-import 'package:warikan_native/src/services/auth.dart';
+import 'package:warikan_native/src/services/auth_provider.dart';
 import 'package:warikan_native/src/sign_in/sign_in_button.dart';
 import 'package:warikan_native/src/sign_in/validators.dart';
 
 class SignInForm extends StatefulWidget with EmailAndPasswordValidators {
-  SignInForm({@required this.auth});
-  final AuthBase auth;
-
   @override
   _SignInFormState createState() => _SignInFormState();
 }
@@ -30,7 +27,8 @@ class _SignInFormState extends State<SignInForm> {
       _isLoading = true;
     });
     try {
-      await widget.auth.signInWithEmailAndPassword(
+      final auth = AuthProvider.of(context);
+      await auth.signInWithEmailAndPassword(
         email: _email,
         password: _password,
       );
