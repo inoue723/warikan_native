@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
 import 'package:warikan_native/src/services/auth.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,6 +11,19 @@ class HomePage extends StatelessWidget {
       await auth.signOut();
     } catch (error) {
       print(error.toString());
+    }
+  }
+
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final didRequestSignOut = await PlatformAlertDialog(
+      title: "ログアウト",
+      content: "ログアウトしますか？",
+      cancelActionText: "いいえ",
+      defaultActionText: "はい",
+    ).show(context);
+
+    if (didRequestSignOut == true) {
+      _signOut();
     }
   }
 
@@ -27,7 +41,7 @@ class HomePage extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            onPressed: _signOut,
+            onPressed: () => _confirmSignOut(context),
           )
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
 import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/sign_in/sign_in_button.dart';
 import 'package:warikan_native/src/sign_in/validators.dart';
@@ -34,7 +35,11 @@ class _SignInFormState extends State<SignInForm> {
         password: _password,
       );
     } catch (error) {
-      print(error.toString());
+      PlatformAlertDialog(
+        title: "ログインに失敗しました",
+        content: error.toString(),
+        defaultActionText: "OK",
+      ).show(context);
     } finally {
       setState(() {
         _isLoading = false;
