@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
-import 'package:warikan_native/src/services/auth_provider.dart';
+import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/sign_in/sign_in_button.dart';
 import 'package:warikan_native/src/sign_in/validators.dart';
 
@@ -28,7 +29,7 @@ class _SignInFormState extends State<SignInForm> {
       _isLoading = true;
     });
     try {
-      final auth = AuthProvider.of(context);
+      final auth = Provider.of<AuthBase>(context);
       await auth.signInWithEmailAndPassword(
         email: _email,
         password: _password,

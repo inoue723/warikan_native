@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:warikan_native/src/sign_in/sign_in_form.dart';
+import 'package:warikan_native/src/sign_in/sign_in_form_bloc_based.dart';
 
 class SignInPage extends StatelessWidget {
   @override
@@ -9,13 +9,13 @@ class SignInPage extends StatelessWidget {
         title: Text("ログイン"),
         elevation: 2.0,
       ),
-      body: _buildContainer(),
+      body: _buildContainer(context),
       backgroundColor: Colors.grey[200],
     );
     return scaffold;
   }
 
-  Widget _buildContainer() {
+  Widget _buildContainer(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
@@ -24,7 +24,7 @@ class SignInPage extends StatelessWidget {
           SizedBox(height: 8.0),
           SingleChildScrollView(
             child: Card(
-              child: SignInForm(),
+              child: SignInFormBlocBased.create(context),
             ),
           ),
         ],
