@@ -6,22 +6,19 @@ import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/sign_in/sign_in_bloc.dart';
 import 'package:warikan_native/src/sign_in/sign_in_button.dart';
 import 'package:warikan_native/src/sign_in/sign_in_model.dart';
-import 'package:warikan_native/src/sign_in/validators.dart';
 
-class SignInFormBlocBased extends StatefulWidget
-    with EmailAndPasswordValidators {
+class SignInFormBlocBased extends StatefulWidget {
   SignInFormBlocBased({@required this.bloc});
   final SignInBloc bloc;
 
   static Widget create(BuildContext context) {
     final AuthBase auth = Provider.of<AuthBase>(context);
     return Provider<SignInBloc>(
-      create: (context) => SignInBloc(auth: auth),
-      child: Consumer<SignInBloc>(
-        builder: (context, bloc, _) => SignInFormBlocBased(bloc: bloc),
-      ),
-      dispose: (context, bloc) => bloc.dispose()
-    );
+        create: (context) => SignInBloc(auth: auth),
+        child: Consumer<SignInBloc>(
+          builder: (context, bloc, _) => SignInFormBlocBased(bloc: bloc),
+        ),
+        dispose: (context, bloc) => bloc.dispose());
   }
 
   @override
@@ -46,16 +43,13 @@ class _SignInFormState extends State<SignInFormBlocBased> {
   }
 
   void _emailEditingComplete(SignInModel model) {
-    final newFocus = widget.emailValidator.isValid(model.email)
+    final newFocus = model.emailValidator.isValid(model.email)
         ? _passwordFocusNode
         : _emailFocusNode;
     FocusScope.of(context).requestFocus(newFocus);
   }
 
   List<Widget> _buildChildren(SignInModel model) {
-    bool submitEnabled = widget.emailValidator.isValid(model.email) &&
-        widget.passwordValidator.isValid(model.password) &&
-        !model.isLoading;
     return [
       _buildEmailTextField(model),
       _buildPasswordTextField(model),
@@ -65,21 +59,19 @@ class _SignInFormState extends State<SignInFormBlocBased> {
       SignInButton(
         text: "ログイン",
         color: Colors.brown,
-        onPressed: submitEnabled ? _submit : null,
+        onPressed: model.canSubmit ? _submit : null,
         textColor: Colors.white,
       )
     ];
   }
 
   TextField _buildPasswordTextField(SignInModel model) {
-    bool showErrorText =
-        model.submitted && !widget.passwordValidator.isValid(model.password);
     return TextField(
       controller: _passwordController,
       focusNode: _passwordFocusNode,
       decoration: InputDecoration(
         labelText: "password",
-        errorText: showErrorText ? widget.invalidPasswordErrorText : null,
+        errorText: model.passwordErrorText,
         enabled: !model.isLoading,
       ),
       obscureText: true,
@@ -90,16 +82,14 @@ class _SignInFormState extends State<SignInFormBlocBased> {
   }
 
   TextField _buildEmailTextField(SignInModel model) {
-    bool showErrorText = model.submitted && !widget.emailValidator.isValid(model.email);
     return TextField(
       controller: _emailController,
       focusNode: _emailFocusNode,
       decoration: InputDecoration(
-        labelText: "email",
-        hintText: "email@example.com",
-        errorText: showErrorText ? widget.invalidEmailErrorText : null,
-        enabled: !model.isLoading
-      ),
+          labelText: "email",
+          hintText: "email@example.com",
+          errorText: model.emailErrorText,
+          enabled: !model.isLoading),
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
@@ -111,17 +101,16 @@ class _SignInFormState extends State<SignInFormBlocBased> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<SignInModel>(
-      stream: widget.bloc.modelStream,
-      initialData: SignInModel(),
-      builder: (context, snapshot) {
-        final SignInModel model = snapshot.data;
-        return Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: _buildChildren(model),
-          ),
-        );
-      }
-    );
+        stream: widget.bloc.modelStream,
+        initialData: SignInModel(),
+        builder: (context, snapshot) {
+          final SignInModel model = snapshot.data;
+          return Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              children: _buildChildren(model),
+            ),
+          );
+        });
   }
 }
