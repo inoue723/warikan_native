@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:warikan_native/src/sign_in/sign_in_form_bloc_based.dart';
+// import 'package:warikan_native/src/sign_in/sign_in_form_bloc_based.dart';
+import 'package:warikan_native/src/sign_in/sign_in_form_change_notifier.dart';
 
 class SignInPage extends StatelessWidget {
   @override
@@ -24,7 +25,7 @@ class SignInPage extends StatelessWidget {
           SizedBox(height: 8.0),
           SingleChildScrollView(
             child: Card(
-              child: SignInFormBlocBased.create(context),
+              child: SignInFormChangeNotifier.create(context),
             ),
           ),
         ],
