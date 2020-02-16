@@ -4,8 +4,9 @@ import 'package:warikan_native/src/services/api_path.dart';
 import 'package:warikan_native/src/services/firestore_service.dart';
 
 abstract class Database {
-  Future<void> createCost(Cost cost);
+  Future<void> setCost(Cost cost);
   Stream<List<Cost>> costStream();
+  String documentIdFromCurrentDate();
 }
 
 class FirestoreDatabase implements Database {
@@ -13,14 +14,16 @@ class FirestoreDatabase implements Database {
   final String uid;
   final _service = FirestoreService.instance;
 
-  Future<void> createCost(Cost cost) async => _service.setData(
-        path: APIPath.cost(uid, "cost_test_1"),
+  String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
+
+  Future<void> setCost(Cost cost) async => _service.setData(
+        path: APIPath.cost(uid, cost.id),
         data: cost.toMap(),
       );
 
   Stream<List<Cost>> costStream() => _service.collectionStream(
         path: APIPath.costs(uid),
-        builder: (data) => Cost.fromMap(data),
+        builder: (data, documentId) => Cost.fromMap(data, documentId),
       );
 
 }

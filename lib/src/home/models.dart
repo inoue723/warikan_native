@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 
 class Cost {
   Cost({
+    @required this.id,
     @required this.amount,
     @required this.category,
     @required this.paymentDate,
     @required this.createdAt,
   });
+  final String id;
   final int amount;
   final String category;
   final DateTime paymentDate;
   final DateTime createdAt;
 
-  factory Cost.fromMap(Map<String, dynamic> data) {
+  factory Cost.fromMap(Map<String, dynamic> data, String documentId) {
     if (data == null) {
       return null;
     }
@@ -33,6 +35,7 @@ class Cost {
     }
 
     return Cost(
+      id: documentId,
       amount: amount,
       category: category,
       paymentDate: paymentDate,

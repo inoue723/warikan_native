@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
-import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
+import 'package:warikan_native/src/costs/costs_list.dart';
+import 'package:warikan_native/src/costs/edit_cost_page.dart';
 import 'package:warikan_native/src/home/models.dart';
 import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
@@ -30,23 +30,6 @@ class CostsPage extends StatelessWidget {
     }
   }
 
-  Future<void> _createCost(BuildContext context) async {
-    final database = Provider.of<Database>(context, listen: false);
-    try {
-      await database.createCost(Cost(
-        amount: 1000,
-        category: "test",
-        // createdAt: DateTime.now(),
-        // paymentDate: DateTime.now(),
-      ));
-    } on PlatformException catch (err) {
-      PlatformExceptionAlertDialog(
-        title: "Operation failed",
-        exception: err,
-      ).show(context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +51,7 @@ class CostsPage extends StatelessWidget {
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _createCost(context),
+        onPressed: () => EditCostPage.show(context, cost: null),
       ),
     );
   }
@@ -80,7 +63,12 @@ class CostsPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final costs = snapshot.data;
-          final children = costs.map((cost) => Text(cost.category)).toList();
+          final children = costs
+              .map((cost) => CostsListTile(
+                    cost: cost,
+                    onTap: () => EditCostPage.show(context, cost: cost),
+                  ))
+              .toList();
           return ListView(children: children);
         }
         if (snapshot.hasError) {

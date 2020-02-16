@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:warikan_native/src/costs/costs_page.dart';
 import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
 import 'package:warikan_native/src/sign_in/sign_in_page.dart';
-
-import 'home/costs_page.dart';
 
 class LandingPage extends StatelessWidget {
   @override
