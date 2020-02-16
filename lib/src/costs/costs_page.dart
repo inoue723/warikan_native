@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
 import 'package:warikan_native/src/costs/costs_list.dart';
+import 'package:warikan_native/src/costs/list_items_builder.dart';
 import 'package:warikan_native/src/costs/edit_cost_page.dart';
 import 'package:warikan_native/src/home/models.dart';
 import 'package:warikan_native/src/services/auth.dart';
@@ -61,20 +62,16 @@ class CostsPage extends StatelessWidget {
     return StreamBuilder<List<Cost>>(
       stream: database.costStream(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final costs = snapshot.data;
-          final children = costs
-              .map((cost) => CostsListTile(
-                    cost: cost,
-                    onTap: () => EditCostPage.show(context, cost: cost),
-                  ))
-              .toList();
-          return ListView(children: children);
-        }
-        if (snapshot.hasError) {
-          return Center(child: Text("snapshot error"));
-        }
-        return Center(child: CircularProgressIndicator());
+        return ListItemBuilder(
+          snapshot: snapshot,
+          itemBuilder: (context, cost) => CostsListTile(
+            cost: cost,
+            onTap: () => EditCostPage.show(
+              context,
+              cost: cost,
+            ),
+          ),
+        );
       },
     );
   }
