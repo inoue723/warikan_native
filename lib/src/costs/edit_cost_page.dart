@@ -47,7 +47,7 @@ class _EditCostPageState extends State<EditCostPage> {
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
       final id = widget.cost?.id ?? widget.database.documentIdFromCurrentDate();
-      final cost = Cost(id: id, amount: _amount, category: _category, paymentDate: DateTime.now(), createdAt: DateTime.now(),);
+      final cost = Cost(id: id, amount: _amount, category: _category, paymentDate: DateTime.now(),);
       await widget.database.setCost(cost);     
       Navigator.of(context).pop();
     }
