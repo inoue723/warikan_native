@@ -9,7 +9,8 @@ class CostsListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(cost.category),
+      title: Text("${cost.amount}円"),
+      subtitle: Text(cost.category),
       trailing: Icon(Icons.chevron_right),
       onTap: onTap,
     );
