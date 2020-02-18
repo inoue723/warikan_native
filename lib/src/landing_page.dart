@@ -18,7 +18,7 @@ class LandingPage extends StatelessWidget {
             return SignInPage();
           }
           return Provider<Database>(
-            create: (_) => FirestoreDatabase(uid: user.uid),
+            create: (_) => FirestoreDatabase(uid: user.uid, partnerUid: "OgEnRALKDwV25HnR7z8sh3HHvVF3"),
             child: CostsPage(),
           );
         } else {

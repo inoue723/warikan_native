@@ -62,8 +62,9 @@ class CostsPage extends StatelessWidget {
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
     return StreamBuilder<List<Cost>>(
-      stream: database.costStream(),
+      stream: database.totalCostsStream(),
       builder: (context, snapshot) {
+        print(snapshot.data);
         return ListItemBuilder(
           snapshot: snapshot,
           itemBuilder: (context, cost) => Dismissible(
