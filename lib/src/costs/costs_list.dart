@@ -17,7 +17,9 @@ class CostsListContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [
-      Card(child: Text("total cost ${model.totalCostAmount}"))
+      Card(child: Text("total cost ${model.totalCostAmount}")),
+      Card(child: Text("myTotalCostAmount ${model.myTotalCostAmount}")),
+      Card(child: Text("partnerTotalCostAmount cost ${model.partnerTotalCostAmount}")),
     ];
 
     List<ListTile> costList = List.generate(model.costs.length, (index) {
