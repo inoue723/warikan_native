@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
 import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
+import 'package:warikan_native/src/costs/container_builder.dart';
+import 'package:warikan_native/src/costs/costs_bloc.dart';
 import 'package:warikan_native/src/costs/costs_list.dart';
 import 'package:warikan_native/src/costs/list_items_builder.dart';
 import 'package:warikan_native/src/costs/edit_cost_page.dart';
@@ -61,27 +63,29 @@ class CostsPage extends StatelessWidget {
 
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
-    return StreamBuilder<List<Cost>>(
-      stream: database.totalCostsStream(),
+    final bloc = CostsBloc(database: database);
+    return StreamBuilder<CostsSummaryTileModel>(
+      stream: bloc.costsSummaryTileModelStream,
       builder: (context, snapshot) {
-        print(snapshot.data);
-        return ListItemBuilder(
+        print(snapshot);
+        return ContainerBuilder(
           snapshot: snapshot,
-          itemBuilder: (context, cost) => Dismissible(
-            key: Key("cost-${cost.id}"),
-            background: Container(
-              color: Colors.red,
-            ),
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) => _delete(context, cost),
-            child: CostsListTile(
-              cost: cost,
-              onTap: () => EditCostPage.show(
-                context,
-                cost: cost,
-              ),
-            ),
-          ),
+          itemBuilder: (context, model) => CostsListContent(model: model),
+          // itemBuilder: (context, cost) => Dismissible(
+          //   key: Key("cost-${cost.id}"),
+          //   background: Container(
+          //     color: Colors.red,
+          //   ),
+          //   direction: DismissDirection.endToStart,
+          //   onDismissed: (direction) => _delete(context, cost),
+          //   child: CostsListContent(
+          //     cost: cost,
+          //     onTap: () => EditCostPage.show(
+          //       context,
+          //       cost: cost,
+          //     ),
+          //   ),
+          // ),
         );
       },
     );
