@@ -44,6 +44,7 @@ class CostsBloc {
       totalCostAmount: totalCostAmount,
       myTotalCostAmount: myTotalCostAmount,
       partnerTotalCostAmount: partnerTotalCostAmount,
+      differenceAmount: myTotalCostAmount - partnerTotalCostAmount,
     );
   }
 }

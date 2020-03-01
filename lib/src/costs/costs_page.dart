@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
-import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
 import 'package:warikan_native/src/costs/container_builder.dart';
 import 'package:warikan_native/src/costs/costs_bloc.dart';
 import 'package:warikan_native/src/costs/costs_list.dart';
-import 'package:warikan_native/src/costs/list_items_builder.dart';
 import 'package:warikan_native/src/costs/edit_cost_page.dart';
-import 'package:warikan_native/src/home/models.dart';
 import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
 
@@ -71,35 +67,8 @@ class CostsPage extends StatelessWidget {
         return ContainerBuilder(
           snapshot: snapshot,
           itemBuilder: (context, model) => CostsListContent(model: model),
-          // itemBuilder: (context, cost) => Dismissible(
-          //   key: Key("cost-${cost.id}"),
-          //   background: Container(
-          //     color: Colors.red,
-          //   ),
-          //   direction: DismissDirection.endToStart,
-          //   onDismissed: (direction) => _delete(context, cost),
-          //   child: CostsListContent(
-          //     cost: cost,
-          //     onTap: () => EditCostPage.show(
-          //       context,
-          //       cost: cost,
-          //     ),
-          //   ),
-          // ),
         );
       },
     );
-  }
-
-  Future<void> _delete(BuildContext context, Cost cost) async {
-    try {
-      final database = Provider.of<Database>(context, listen: false);
-      await database.deleteCost(cost);
-    } on PlatformException catch (err) {
-      PlatformExceptionAlertDialog(
-        title: "削除に失敗しました",
-        exception: err, 
-      );
-    }
   }
 }
