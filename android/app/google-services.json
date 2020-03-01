@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "154221457694",
+    "firebase_url": "https://firestore-local-test.firebaseio.com",
+    "project_id": "firestore-local-test",
+    "storage_bucket": "firestore-local-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154221457694:android:d2fad86eea06a33e78990f",
+        "android_client_info": {
+          "package_name": "site.warikan.warikan_native"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154221457694-quoehis7gcp9ip4f5j1018o5pjum194k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW6qysvn7v0wS7UM7Hk4OLnqu270Qu05I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154221457694-quoehis7gcp9ip4f5j1018o5pjum194k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "154221457694-cie06vuj8ms34nut2gfd22cmb6fkvbs1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.warikanNative"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
