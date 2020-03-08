@@ -25,7 +25,11 @@ class CostsBloc {
   CostsSummaryTileModel _createModels(List<List<Cost>> costsList) {
     final myCosts = costsList[0];
     final partnerCosts = costsList[1];
-    final flattenCosts = costsList.expand((cost) => cost).toList();
+    final flattenCosts = costsList
+      .expand((cost) => cost)
+      .toList();
+
+    flattenCosts.sort((current, next) => next.paymentDate.compareTo(current.paymentDate));
 
     final totalCostAmount = flattenCosts
         .map((cost) => cost.amount)
