@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>154221457694-cie06vuj8ms34nut2gfd22cmb6fkvbs1.apps.googleusercontent.com</string>
+	<string>1078576149418-3aoh77oimhh1l0ecj22lfo4cnpfn97e4.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.154221457694-cie06vuj8ms34nut2gfd22cmb6fkvbs1</string>
+	<string>com.googleusercontent.apps.1078576149418-3aoh77oimhh1l0ecj22lfo4cnpfn97e4</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBJkdR23m5lh24Wk0mdXQKWEzO6mn7-RtQ</string>
+	<string>AIzaSyDHC2b2waTQOpiz8P9ZNSgHQcYBvsHBts0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>154221457694</string>
+	<string>1078576149418</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.warikanNative</string>
+	<string>com.inoue723.warikan.prod</string>
 	<key>PROJECT_ID</key>
-	<string>firestore-local-test</string>
+	<string>gender-equality-4bdf6</string>
 	<key>STORAGE_BUCKET</key>
-	<string>firestore-local-test.appspot.com</string>
+	<string>gender-equality-4bdf6.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:154221457694:ios:208888d0c678fcc478990f</string>
+	<string>1:1078576149418:ios:8affe6de95f62187aff1d3</string>
 	<key>DATABASE_URL</key>
-	<string>https://firestore-local-test.firebaseio.com</string>
+	<string>https://gender-equality-4bdf6.firebaseio.com</string>
 </dict>
 </plist>
