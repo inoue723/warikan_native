@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:warikan_native/src/costs/costs_bloc.dart';
 import 'package:warikan_native/src/costs/costs_page.dart';
 import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
@@ -18,8 +20,15 @@ class LandingPage extends StatelessWidget {
             return SignInPage();
           }
           return Provider<Database>(
-            create: (_) => FirestoreDatabase(uid: user.uid, partnerUid: "OgEnRALKDwV25HnR7z8sh3HHvVF3"),
-            child: CostsPage(),
+            create: (_) => FirestoreDatabase(uid: user.uid),
+            child: Consumer<Database>(
+              builder: (context, database, child) {
+                return BlocProvider<CostsBloc>(
+                  create: (_) => CostsBloc(database: database)..add(LoadCosts()),
+                  child: CostsPage()
+                );
+              },
+            ),
           );
         } else {
           return Scaffold(

@@ -1,0 +1,4 @@
+FLUTTER_FLAVOR=Development
+PRODUCT_BUNDLE_IDENTIFIER=com.inoue723.warikan.dev
+DISPLAY_NAME=warikan dev
+FLUTTER_TARGET=lib/main.dart

@@ -58,7 +58,7 @@ class _EditCostPageState extends State<EditCostPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 2.0,
-        title: widget.cost == null ? Text("新規") : Text("詳細"),
+        title: widget.cost == null ? Text("新規") : Text("編集"),
         actions: <Widget>[
           FlatButton(
             child: Text(
