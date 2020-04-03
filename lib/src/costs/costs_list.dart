@@ -28,6 +28,9 @@ class CostsListContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [
+      SizedBox(
+        height: 20,
+      ),
       Column(
         children: <Widget>[
           Text(

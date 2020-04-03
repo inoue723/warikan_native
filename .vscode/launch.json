@@ -10,7 +10,10 @@
       "request": "launch",
       "program": "lib/main.dart",
       "flutterMode": "debug",
-      "args": ["--flavor development"]
+      "args": [
+        "--flavor",
+        "development"
+      ]
     },
     {
       "name": "release_dev",
@@ -18,7 +21,10 @@
       "request": "launch",
       "program": "lib/main.dart",
       "flutterMode": "release",
-      "args": ["--flavor development"]
+      "args": [
+        "--flavor",
+        "development"
+      ]
     },
     {
       "name": "release_prod",
@@ -26,7 +32,10 @@
       "request": "launch",
       "program": "lib/main.dart",
       "flutterMode": "release",
-      "args": ["--flavor production"]
+      "args": [
+        "--flavor",
+        "production"
+      ]
     },
   ]
 }

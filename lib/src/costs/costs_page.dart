@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
-import 'package:warikan_native/src/costs/container_builder.dart';
 import 'package:warikan_native/src/costs/costs_bloc.dart';
 import 'package:warikan_native/src/costs/costs_list.dart';
 import 'package:warikan_native/src/costs/edit_cost_page.dart';
 import 'package:warikan_native/src/services/auth.dart';
-import 'package:warikan_native/src/services/database.dart';
 
 class CostsPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -58,16 +57,17 @@ class CostsPage extends StatelessWidget {
   }
 
   Widget _buildContents(BuildContext context) {
-    final database = Provider.of<Database>(context, listen: false);
-    final bloc = CostsBloc(database: database);
-    return StreamBuilder<CostsSummaryTileModel>(
-      stream: bloc.costsSummaryTileModelStream,
-      builder: (context, snapshot) {
-        print(snapshot);
-        return ContainerBuilder(
-          snapshot: snapshot,
-          itemBuilder: (context, model) => CostsListContent(model: model),
-        );
+    return BlocBuilder<CostsBloc, CostsState>(
+      builder: (context, state) {
+        if (state is CostsLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (state is CostsLoaded) {
+          return CostsListContent(model: state.costs);
+        }
+
+        return Container();
       },
     );
   }
