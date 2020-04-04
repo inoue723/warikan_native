@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/home/models.dart';
 import 'package:warikan_native/src/services/database.dart';
 
 class EditCostPage extends StatefulWidget {
-  const EditCostPage({Key key, @required this.database, this.cost}) : super(key: key);
+  const EditCostPage({Key key, @required this.database, this.cost})
+      : super(key: key);
   final Database database;
   final Cost cost;
 
@@ -26,13 +28,17 @@ class _EditCostPageState extends State<EditCostPage> {
   final _formKey = GlobalKey<FormState>();
   int _amount;
   String _category;
+  DateTime _paymentDate = DateTime.now();
+  final _paymentDateController = TextEditingController();
 
   @override
   void initState() {
     if (widget.cost != null) {
       _amount = widget.cost.amount;
       _category = widget.cost.category;
+      _paymentDate = widget.cost.paymentDate;
     }
+    _paymentDateController.value = TextEditingValue(text: _formatDate(_paymentDate));
   }
 
   bool _validateAndSaveForm() {
@@ -47,8 +53,13 @@ class _EditCostPageState extends State<EditCostPage> {
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
       final id = widget.cost?.id ?? widget.database.documentIdFromCurrentDate();
-      final cost = Cost(id: id, amount: _amount, category: _category, paymentDate: DateTime.now(),);
-      await widget.database.setCost(cost);     
+      final cost = Cost(
+        id: id,
+        amount: _amount,
+        category: _category,
+        paymentDate: _paymentDate,
+      );
+      await widget.database.setCost(cost);
       Navigator.of(context).pop();
     }
   }
@@ -90,10 +101,11 @@ class _EditCostPageState extends State<EditCostPage> {
 
   Widget _buildForm() {
     return Form(
-        key: _formKey,
-        child: Column(
-          children: _buildFormChildren(),
-        ));
+      key: _formKey,
+      child: Column(
+        children: _buildFormChildren(),
+      ),
+    );
   }
 
   List<Widget> _buildFormChildren() {
@@ -110,6 +122,41 @@ class _EditCostPageState extends State<EditCostPage> {
         decoration: InputDecoration(labelText: "カテゴリー"),
         onSaved: (value) => _category = value,
       ),
+      FlatButton(
+        padding: EdgeInsets.zero,
+        onPressed: () {
+          DatePicker.showDatePicker(
+            context,
+            showTitleActions: true,
+            minTime: DateTime(1900),
+            maxTime: DateTime(2999),
+            onConfirm: (date) {
+              _paymentDate = date;
+              _paymentDateController.value = TextEditingValue(text: _formatDate(date));
+            },
+            currentTime: _paymentDate ?? DateTime.now(),
+            locale: LocaleType.jp,
+          );
+        },
+        child: AbsorbPointer(
+          child: TextFormField(
+            decoration: InputDecoration(labelText: "支払日"),
+            controller: _paymentDateController,
+          ),
+        ),
+      ),
     ];
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.year}年${date.month}月${date.day}日";
+  }
+  void _selectDate(BuildContext context) {
+    showDatePicker(
+      context: context,
+      initialDate: _paymentDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
   }
 }
