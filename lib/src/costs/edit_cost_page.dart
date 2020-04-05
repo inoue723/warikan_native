@@ -151,12 +151,4 @@ class _EditCostPageState extends State<EditCostPage> {
   String _formatDate(DateTime date) {
     return "${date.year}年${date.month}月${date.day}日";
   }
-  void _selectDate(BuildContext context) {
-    showDatePicker(
-      context: context,
-      initialDate: _paymentDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-  }
 }
