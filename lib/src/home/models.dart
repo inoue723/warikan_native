@@ -41,4 +41,9 @@ class Cost {
       "paymentDate": paymentDate,
     };
   }
+
+  @override
+  String toString() {
+    return "id: $id, amount: $amount, category: $category, paymentDate: $paymentDate";
+  }
 }

@@ -67,7 +67,6 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
   Stream<CostsState> _mapLoadCostsToState() async* {
     _subscription?.cancel();
     final User user = await database.getMyUserInfo();
-    print("getMyUserInfo: $user");
     _subscription = _totalCostsStream(user.partnerId)
         .listen((costs) => add(CostsUpdated(costs)));
   }
