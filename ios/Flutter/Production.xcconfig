@@ -1,4 +1,4 @@
 FLUTTER_FLAVOR=Production
 PRODUCT_BUNDLE_IDENTIFIER=com.inoue723.warikan.prod
-DISPLAY_NAME=warikan
+DISPLAY_NAME=Warikan
 FLUTTER_TARGET=lib/main.dart
