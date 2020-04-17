@@ -12,12 +12,12 @@ class CostsSummaryTileModel {
     @required this.myTotalCostAmount,
     @required this.partnerTotalCostAmount,
     @required this.costs,
-    @required this.differenceAmount,
+    @required this.borrowAmount,
   });
   final int totalCostAmount;
   final int myTotalCostAmount;
   final int partnerTotalCostAmount;
-  final int differenceAmount;
+  final int borrowAmount;
   final List<Cost> costs;
 }
 
@@ -28,16 +28,26 @@ class CostsListContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [
-      SizedBox(
-        height: 20,
-      ),
       Column(
         children: <Widget>[
-          Text(
-            "パートナーとの差額",
-            style: TextStyle(color: Colors.grey, fontSize: 14),
+          RichText(
+            text: TextSpan(
+              style: TextStyle(color: Colors.grey, fontSize: 14),
+              children: [
+                TextSpan(
+                  text: model.borrowAmount < 0 ? "貸してる" : "借りてる",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54,
+                  ),
+                ),
+                TextSpan(
+                  text: "金額",
+                )
+              ],
+            ),
           ),
-          _buildDifferenceAmountText(),
+          _buildBorrowAmountText(),
         ],
       )
     ];
@@ -68,14 +78,14 @@ class CostsListContent extends StatelessWidget {
     return ListView(children: children);
   }
 
-  RichText _buildDifferenceAmountText() {
-    final differenceAmount = model.differenceAmount;
-    final color = differenceAmount > 0 ? Colors.green : Colors.red;
+  RichText _buildBorrowAmountText() {
+    final borrowAmount = model.borrowAmount;
+    final color = borrowAmount > 0 ? Colors.red : Colors.green;
     return RichText(
       text: TextSpan(
         children: [
           TextSpan(
-            text: "$differenceAmount",
+            text: "$borrowAmount",
             style: TextStyle(fontSize: 20, color: color),
           ),
           TextSpan(
