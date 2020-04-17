@@ -33,20 +33,18 @@ class CostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("ホーム"),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              "logout",
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () => _confirmSignOut(context),
-          )
-        ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: AppBar(
+          backgroundColor: Colors.white10,
+          elevation: 0,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () => _confirmSignOut(context),
+            )
+          ],
+        ),
       ),
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
