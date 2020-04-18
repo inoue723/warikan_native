@@ -47,7 +47,7 @@ class CostsListContent extends StatelessWidget {
               ],
             ),
           ),
-          _buildBorrowAmountText(),
+          _buildLendOrBorrowAmountText(),
         ],
       )
     ];
@@ -78,14 +78,16 @@ class CostsListContent extends StatelessWidget {
     return ListView(children: children);
   }
 
-  RichText _buildBorrowAmountText() {
-    final borrowAmount = model.borrowAmount;
-    final color = borrowAmount > 0 ? Colors.red : Colors.green;
+  RichText _buildLendOrBorrowAmountText() {
+    final amount = model.borrowAmount.isNegative
+        ? model.borrowAmount * -1
+        : model.borrowAmount;
+    final color = model.borrowAmount.isNegative ? Colors.green : Colors.red;
     return RichText(
       text: TextSpan(
         children: [
           TextSpan(
-            text: "$borrowAmount",
+            text: "$amount",
             style: TextStyle(fontSize: 20, color: color),
           ),
           TextSpan(
