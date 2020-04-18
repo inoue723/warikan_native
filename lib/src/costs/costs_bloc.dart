@@ -109,7 +109,7 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
       totalCostAmount: totalCostAmount,
       myTotalCostAmount: myTotalCostAmount,
       partnerTotalCostAmount: partnerTotalCostAmount,
-      borrowAmount: (partnerTotalCostAmount - myTotalCostAmount / 2).round(),
+      borrowAmount: ((partnerTotalCostAmount - myTotalCostAmount) / 2).round(),
     );
   }
 }
