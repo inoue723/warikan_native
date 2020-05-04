@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1078576149418",
+    "firebase_url": "https://gender-equality-4bdf6.firebaseio.com",
+    "project_id": "gender-equality-4bdf6",
+    "storage_bucket": "gender-equality-4bdf6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078576149418:android:3b5382d6775bd478aff1d3",
+        "android_client_info": {
+          "package_name": "site.warikan.warikan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1078576149418-k81l4deh5befnucrqqqirds20qgljv9t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuiXtjsJGbrMf_qLfXxv1hX52c-Rtag20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1078576149418-k81l4deh5befnucrqqqirds20qgljv9t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1078576149418-3aoh77oimhh1l0ecj22lfo4cnpfn97e4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.inoue723.warikan.prod"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

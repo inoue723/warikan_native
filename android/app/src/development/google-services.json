@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:154221457694:android:d2fad86eea06a33e78990f",
+        "mobilesdk_app_id": "1:154221457694:android:64566ba95b80d78878990f",
         "android_client_info": {
-          "package_name": "site.warikan.warikan_native"
+          "package_name": "site.warikan.warikan.dev"
         }
       },
       "oauth_client": [
@@ -32,10 +32,10 @@
               "client_type": 3
             },
             {
-              "client_id": "154221457694-cie06vuj8ms34nut2gfd22cmb6fkvbs1.apps.googleusercontent.com",
+              "client_id": "154221457694-kd254gb853vo31dmuvsm3dlpmdgc5o53.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.warikanNative"
+                "bundle_id": "com.inoue723.warikan.dev"
               }
             }
           ]
