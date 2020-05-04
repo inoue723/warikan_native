@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:warikan_native/src/common_widgets/custom_radio_button.dart';
+import 'package:warikan_native/src/costs/models/cost_type.dart';
 import 'package:warikan_native/src/home/models.dart';
 import 'package:warikan_native/src/services/database.dart';
 
@@ -29,6 +31,7 @@ class _EditCostPageState extends State<EditCostPage> {
   int _amount;
   String _category;
   DateTime _paymentDate = DateTime.now();
+  CostType _costType = CostType.even;
   final _paymentDateController = TextEditingController();
 
   @override
@@ -38,7 +41,8 @@ class _EditCostPageState extends State<EditCostPage> {
       _category = widget.cost.category;
       _paymentDate = widget.cost.paymentDate;
     }
-    _paymentDateController.value = TextEditingValue(text: _formatDate(_paymentDate));
+    _paymentDateController.value =
+        TextEditingValue(text: _formatDate(_paymentDate));
   }
 
   bool _validateAndSaveForm() {
@@ -67,33 +71,44 @@ class _EditCostPageState extends State<EditCostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2.0,
-        title: widget.cost == null ? Text("新規") : Text("編集"),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              "保存",
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ),
-            onPressed: _submit,
-          )
-        ],
-      ),
       body: _buildContents(),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.white,
     );
   }
 
   Widget _buildContents() {
-    return SingleChildScrollView(
+    return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: _buildForm(),
-          ),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.cost == null ? "自分の支払いを入力" : "編集",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    size: 32.0,
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _buildForm(),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -103,13 +118,35 @@ class _EditCostPageState extends State<EditCostPage> {
     return Form(
       key: _formKey,
       child: Column(
-        children: _buildFormChildren(),
+        children: _buildFormChildren()
+          ..addAll([
+            SizedBox(height: 10.0),
+            FlatButton(
+              child: Text(
+                "保存",
+                style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              onPressed: _submit,
+              shape: StadiumBorder(
+                side: BorderSide(
+                  color:
+                      Theme.of(context).buttonTheme.colorScheme.primaryVariant,
+                  width: 1.6,
+                ),
+              ),
+            ),
+          ]),
       ),
     );
   }
 
   List<Widget> _buildFormChildren() {
     return [
+      _buildCostTypeRadioButtons(),
       TextFormField(
         decoration: InputDecoration(labelText: "金額"),
         initialValue: _amount != null ? "$_amount" : "",
@@ -132,7 +169,8 @@ class _EditCostPageState extends State<EditCostPage> {
             maxTime: DateTime(2999),
             onConfirm: (date) {
               _paymentDate = date;
-              _paymentDateController.value = TextEditingValue(text: _formatDate(date));
+              _paymentDateController.value =
+                  TextEditingValue(text: _formatDate(date));
             },
             currentTime: _paymentDate ?? DateTime.now(),
             locale: LocaleType.jp,
@@ -150,5 +188,26 @@ class _EditCostPageState extends State<EditCostPage> {
 
   String _formatDate(DateTime date) {
     return "${date.year}年${date.month}月${date.day}日";
+  }
+
+  Widget _buildCostTypeRadioButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        CustomRadioButtonGroup<CostType>(
+          onChanged: (value) {
+            print(value);
+            setState(() {
+              _costType = value;
+            });
+          },
+          models: [
+            CustomRadioButtonModel(title: "割り勘", value: CostType.even),
+            CustomRadioButtonModel(title: "貸した", value: CostType.asset),
+          ],
+          groupValue: _costType,
+        )
+      ],
+    );
   }
 }
