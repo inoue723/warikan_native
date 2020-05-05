@@ -35,7 +35,7 @@ class Cost {
       amount: amount,
       category: category,
       paymentDate: paymentDate,
-      burdenRate: BurdenRate(burdenRate),
+      burdenRate: burdenRate != null ? BurdenRate(burdenRate) : null,
     );
   }
 

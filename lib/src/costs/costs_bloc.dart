@@ -55,8 +55,6 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
 
   @override
   Stream<CostsState> mapEventToState(CostsEvent event) async* {
-    print("event: $event");
-
     if (event is LoadCosts) {
       yield* _mapLoadCostsToState();
     } else if (event is CostsUpdated) {
@@ -96,20 +94,20 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
         .map((cost) => cost.amount)
         .reduce((value, element) => value + element);
 
-    final myTotalCostAmount = myCosts
-        .map((cost) => cost.amount)
-        .reduce((value, element) => value + element);
-
-    final partnerTotalCostAmount = partnerCosts
-        .map((cost) => cost.amount)
-        .reduce((value, element) => value + element);
+    double borrowAmount = 0;
+    myCosts.forEach((myCost) {
+      // TODO burdenRateは現状nullのものもあるが、migrationができnullチェックを削除する
+      borrowAmount -= myCost.amount * (myCost.burdenRate?.partnerRate ?? 0.5);
+    });
+    partnerCosts.forEach((partnerCost) {
+      // TODO burdenRateは現状nullのものもあるが、migrationができnullチェックを削除する
+      borrowAmount += partnerCost.amount * (partnerCost.burdenRate?.partnerRate ?? 0.5);
+    });
 
     return CostsSummaryTileModel(
       costs: flattenCosts,
       totalCostAmount: totalCostAmount,
-      myTotalCostAmount: myTotalCostAmount,
-      partnerTotalCostAmount: partnerTotalCostAmount,
-      borrowAmount: ((partnerTotalCostAmount - myTotalCostAmount) / 2).round(),
+      borrowAmount: borrowAmount.round(),
     );
   }
 }
