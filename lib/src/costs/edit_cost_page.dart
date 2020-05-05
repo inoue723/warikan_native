@@ -27,6 +27,8 @@ class EditCostPage extends StatefulWidget {
 }
 
 class _EditCostPageState extends State<EditCostPage> {
+  bool _isLoading = false;
+
   final _formKey = GlobalKey<FormState>();
   int _amount;
   String _category;
@@ -56,6 +58,10 @@ class _EditCostPageState extends State<EditCostPage> {
   }
 
   Future<void> _submit() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     if (_validateAndSaveForm()) {
       final id = widget.cost?.id ?? widget.database.documentIdFromCurrentDate();
       final cost = Cost(
@@ -63,11 +69,14 @@ class _EditCostPageState extends State<EditCostPage> {
         amount: _amount,
         category: _category,
         paymentDate: _paymentDate,
-        burdenRate: _burdenRate
+        burdenRate: _burdenRate,
       );
       await widget.database.setCost(cost);
       Navigator.of(context).pop();
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -121,27 +130,36 @@ class _EditCostPageState extends State<EditCostPage> {
       key: _formKey,
       child: Column(
         children: _buildFormChildren()
-          ..addAll([
-            SizedBox(height: 10.0),
-            FlatButton(
-              child: Text(
-                "保存",
-                style: TextStyle(
-                  color: Theme.of(context).accentColor,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              onPressed: _submit,
-              shape: StadiumBorder(
-                side: BorderSide(
-                  color:
-                      Theme.of(context).buttonTheme.colorScheme.primaryVariant,
-                  width: 1.6,
-                ),
-              ),
-            ),
-          ]),
+          ..addAll(
+            [
+              SizedBox(height: 10.0),
+              _buildSubmitButton(),
+            ],
+          ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    if (_isLoading == true) {
+      return CircularProgressIndicator();
+    }
+
+    return FlatButton(
+      child: Text(
+        "保存",
+        style: TextStyle(
+          color: Theme.of(context).accentColor,
+          fontSize: 20.0,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      onPressed: _submit,
+      shape: StadiumBorder(
+        side: BorderSide(
+          color: Theme.of(context).buttonTheme.colorScheme.primaryVariant,
+          width: 1.6,
+        ),
       ),
     );
   }
@@ -213,4 +231,3 @@ class _EditCostPageState extends State<EditCostPage> {
     );
   }
 }
-
