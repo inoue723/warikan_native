@@ -43,8 +43,11 @@ class _EditCostPageState extends State<EditCostPage> {
       _amount = widget.cost.amount;
       _category = widget.cost.category;
       _paymentDate = widget.cost.paymentDate;
-      _burdenRate = widget.cost.burdenRate;
-      _burdenRateType = widget.cost.burdenRate.toBurdenRateType();
+
+      if (widget.cost.burdenRate != null) {
+        _burdenRate = widget.cost.burdenRate;
+        _burdenRateType = widget.cost.burdenRate.toBurdenRateType();
+      }
     }
     _paymentDateController.value =
         TextEditingValue(text: _formatDate(_paymentDate));
@@ -84,6 +87,7 @@ class _EditCostPageState extends State<EditCostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: _buildContents(),
       backgroundColor: Colors.white,
     );
