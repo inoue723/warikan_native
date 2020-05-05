@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/custom_radio_button.dart';
-import 'package:warikan_native/src/costs/models/cost_type.dart';
+import 'package:warikan_native/src/costs/models/burden_rate.dart';
 import 'package:warikan_native/src/home/models.dart';
 import 'package:warikan_native/src/services/database.dart';
 
@@ -31,7 +31,8 @@ class _EditCostPageState extends State<EditCostPage> {
   int _amount;
   String _category;
   DateTime _paymentDate = DateTime.now();
-  CostType _costType = CostType.even;
+  BurdenRate _burdenRate = BurdenRate.even();
+  BurdenRateType _burdenRateType = BurdenRateType.even;
   final _paymentDateController = TextEditingController();
 
   @override
@@ -62,6 +63,7 @@ class _EditCostPageState extends State<EditCostPage> {
         amount: _amount,
         category: _category,
         paymentDate: _paymentDate,
+        burdenRate: _burdenRate
       );
       await widget.database.setCost(cost);
       Navigator.of(context).pop();
@@ -194,20 +196,21 @@ class _EditCostPageState extends State<EditCostPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        CustomRadioButtonGroup<CostType>(
+        CustomRadioButtonGroup<BurdenRateType>(
           onChanged: (value) {
-            print(value);
             setState(() {
-              _costType = value;
+              _burdenRateType = value;
+              _burdenRate = _burdenRateType.toBurdenRate();
             });
           },
           models: [
-            CustomRadioButtonModel(title: "割り勘", value: CostType.even),
-            CustomRadioButtonModel(title: "貸した", value: CostType.asset),
+            CustomRadioButtonModel(title: "割り勘", value: BurdenRateType.even),
+            CustomRadioButtonModel(title: "貸した", value: BurdenRateType.partner),
           ],
-          groupValue: _costType,
+          groupValue: _burdenRateType,
         )
       ],
     );
   }
 }
+
