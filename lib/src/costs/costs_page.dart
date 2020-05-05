@@ -48,7 +48,11 @@ class CostsPage extends StatelessWidget {
       ),
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        backgroundColor: Colors.blueAccent[200],
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         onPressed: () => EditCostPage.show(context, cost: null),
       ),
     );

@@ -9,14 +9,10 @@ import 'package:flutter/services.dart';
 class CostsSummaryTileModel {
   CostsSummaryTileModel({
     @required this.totalCostAmount,
-    @required this.myTotalCostAmount,
-    @required this.partnerTotalCostAmount,
-    @required this.costs,
     @required this.borrowAmount,
+    @required this.costs,
   });
   final int totalCostAmount;
-  final int myTotalCostAmount;
-  final int partnerTotalCostAmount;
   final int borrowAmount;
   final List<Cost> costs;
 }
