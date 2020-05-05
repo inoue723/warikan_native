@@ -1,20 +1,31 @@
-import 'package:flutter/foundation.dart';
-
 class BurdenRate {
-  BurdenRate(@required this.rate) : assert(rate != null);
-  const BurdenRate.even() : rate = 0.5;
-  const BurdenRate.partner() : rate = 0;
+  static const evenRate = 0.5;
+  static const lendingRate = 0.0;
+
+  BurdenRate(this.rate);
+  const BurdenRate.even() : rate = evenRate;
+  const BurdenRate.lending() : rate = lendingRate;
 
   final double rate;
   double get partnerRate => 1 - rate;
 
-  bool get isEven => rate == 0.5;
-  bool get isPartner => rate == 0;
+  bool get isEven => rate == evenRate;
+  bool get isLending => rate == lendingRate;
+
+  BurdenRateType toBurdenRateType() {
+    if (rate == evenRate) {
+      return BurdenRateType.even;
+    } else if (rate == lendingRate) {
+      return BurdenRateType.lending;
+    } else {
+      return BurdenRateType.custom;
+    }
+  }
 }
 
 enum BurdenRateType {
   even,
-  partner,
+  lending,
   custom,
 }
 
@@ -23,8 +34,8 @@ extension BurdenRateTypeExtension on BurdenRateType {
     switch (this) {
       case BurdenRateType.even:
         return BurdenRate.even();
-      case BurdenRateType.partner:
-        return BurdenRate.partner();
+      case BurdenRateType.lending:
+        return BurdenRate.lending();
       case BurdenRateType.custom:
         if (rate == null) {
           throw Exception("rate is required when type is custom");

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:warikan_native/src/costs/costs_list.dart';
+import 'package:warikan_native/src/costs/models/burden_rate.dart';
 import 'package:warikan_native/src/home/models.dart';
 import 'package:warikan_native/src/services/database.dart';
 import 'package:warikan_native/src/services/models/user.dart';
@@ -96,12 +97,10 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
 
     double borrowAmount = 0;
     myCosts.forEach((myCost) {
-      // TODO burdenRateは現状nullのものもあるが、migrationができnullチェックを削除する
-      borrowAmount -= myCost.amount * (myCost.burdenRate?.partnerRate ?? 0.5);
+      borrowAmount -= myCost.amount * (myCost.burdenRate?.partnerRate ?? BurdenRate.evenRate);
     });
     partnerCosts.forEach((partnerCost) {
-      // TODO burdenRateは現状nullのものもあるが、migrationができnullチェックを削除する
-      borrowAmount += partnerCost.amount * (partnerCost.burdenRate?.partnerRate ?? 0.5);
+      borrowAmount += partnerCost.amount * (partnerCost.burdenRate?.partnerRate ?? BurdenRate.evenRate);
     });
 
     return CostsSummaryTileModel(

@@ -43,6 +43,8 @@ class _EditCostPageState extends State<EditCostPage> {
       _amount = widget.cost.amount;
       _category = widget.cost.category;
       _paymentDate = widget.cost.paymentDate;
+      _burdenRate = widget.cost.burdenRate;
+      _burdenRateType = widget.cost.burdenRate.toBurdenRateType();
     }
     _paymentDateController.value =
         TextEditingValue(text: _formatDate(_paymentDate));
@@ -223,7 +225,7 @@ class _EditCostPageState extends State<EditCostPage> {
           },
           models: [
             CustomRadioButtonModel(title: "割り勘", value: BurdenRateType.even),
-            CustomRadioButtonModel(title: "貸した", value: BurdenRateType.partner),
+            CustomRadioButtonModel(title: "貸した", value: BurdenRateType.lending),
           ],
           groupValue: _burdenRateType,
         )
