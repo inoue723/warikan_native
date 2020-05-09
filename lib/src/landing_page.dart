@@ -6,6 +6,7 @@ import 'package:warikan_native/src/costs/costs_page.dart';
 import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
 import 'package:warikan_native/src/sign_in/sign_in_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -23,6 +24,8 @@ class LandingPage extends StatelessWidget {
             create: (_) => FirestoreDatabase(uid: user.uid),
             child: Consumer<Database>(
               builder: (context, database, child) {
+                final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+                _firebaseMessaging.requestNotificationPermissions();
                 return BlocProvider<CostsBloc>(
                   create: (_) => CostsBloc(database: database)..add(LoadCosts()),
                   child: CostsPage()
