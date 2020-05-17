@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:warikan_native/src/costs/costs_list.dart';
 import 'package:warikan_native/src/costs/models/burden_rate.dart';
-import 'package:warikan_native/src/home/models.dart';
+import 'package:warikan_native/src/models/cost.dart';
+import 'package:warikan_native/src/models/user.dart';
 import 'package:warikan_native/src/services/database.dart';
-import 'package:warikan_native/src/services/models/user.dart';
 
 abstract class CostsState extends Equatable {
   const CostsState();

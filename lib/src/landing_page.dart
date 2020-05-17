@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/costs/costs_bloc.dart';
 import 'package:warikan_native/src/costs/costs_page.dart';
+import 'package:warikan_native/src/models/user.dart';
 import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
 import 'package:warikan_native/src/sign_in/sign_in_page.dart';

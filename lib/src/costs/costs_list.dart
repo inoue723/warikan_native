@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/costs/edit_cost_page.dart';
-import 'package:warikan_native/src/home/models.dart';
+import 'package:warikan_native/src/models/cost.dart';
 import 'package:warikan_native/src/services/database.dart';
 import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
 import 'package:flutter/services.dart';
