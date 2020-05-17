@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:warikan_native/src/costs/costs_bloc.dart';
+import 'package:warikan_native/src/bloc/costs/index.dart';
 import 'package:warikan_native/src/costs/costs_page.dart';
 import 'package:warikan_native/src/models/user.dart';
 import 'package:warikan_native/src/services/auth.dart';

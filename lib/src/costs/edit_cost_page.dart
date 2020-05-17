@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/custom_radio_button.dart';
-import 'package:warikan_native/src/costs/models/burden_rate.dart';
+import 'package:warikan_native/src/models/burden_rate.dart';
 import 'package:warikan_native/src/models/cost.dart';
 import 'package:warikan_native/src/services/database.dart';
 
@@ -39,6 +39,7 @@ class _EditCostPageState extends State<EditCostPage> {
 
   @override
   void initState() {
+    super.initState();
     if (widget.cost != null) {
       _amount = widget.cost.amount;
       _category = widget.cost.category;

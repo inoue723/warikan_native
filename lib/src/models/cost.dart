@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:warikan_native/src/costs/models/burden_rate.dart';
+import 'package:warikan_native/src/models/burden_rate.dart';
 
 class Cost {
   Cost({
