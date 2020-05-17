@@ -24,12 +24,28 @@ class LandingPage extends StatelessWidget {
             create: (_) => FirestoreDatabase(uid: user.uid),
             child: Consumer<Database>(
               builder: (context, database, child) {
-                final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+                final FirebaseMessaging _firebaseMessaging =
+                    FirebaseMessaging();
                 _firebaseMessaging.requestNotificationPermissions();
-                return BlocProvider<CostsBloc>(
-                  create: (_) => CostsBloc(database: database)..add(LoadCosts()),
-                  child: CostsPage()
+                _firebaseMessaging.getToken().then((token) => print(token));
+
+                _firebaseMessaging.configure(
+                  onMessage: (Map<String, dynamic> message) {
+                    print('Received notification: $message');
+                  },
+                  onResume: (Map<String, dynamic> message) {
+                    print('on resume $message');
+                    return;
+                  },
+                  onLaunch: (Map<String, dynamic> message) {
+                    print('on launch $message');
+                    return;
+                  },
                 );
+                return BlocProvider<CostsBloc>(
+                    create: (_) =>
+                        CostsBloc(database: database)..add(LoadCosts()),
+                    child: CostsPage());
               },
             ),
           );
