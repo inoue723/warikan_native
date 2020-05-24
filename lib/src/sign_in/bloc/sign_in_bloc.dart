@@ -1,18 +1,26 @@
 import 'dart:async';
+
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:warikan_native/src/services/auth.dart';
-import 'package:warikan_native/src/sign_in/sign_in_model.dart';
 
-class SignInBloc {
-  SignInBloc({ @required this.auth});
+part 'sign_in_event.dart';
+part 'sign_in_state.dart';
+
+class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final AuthBase auth;
-  final StreamController<SignInModel> _modelController = StreamController<SignInModel>();
 
-  Stream<SignInModel> get modelStream => _modelController.stream;
-  SignInModel _model = SignInModel();
+  SignInBloc({@required this.auth});
 
-  void dispose() {
-    _modelController.close();
+  @override
+  SignInState get initialState => SignInInitial();
+
+  @override
+  Stream<SignInState> mapEventToState(SignInEvent event) async* {
+    if (event is SignInSubmit) {
+      yield* _mapSubmitEventToState(event);
+    }
   }
 
   Future<void> submit() async {
@@ -47,5 +55,17 @@ class SignInBloc {
     );
 
     _modelController.add(_model);
+  }
+
+  Stream<SignInState> _mapSubmitEventToState(SignInSubmit event) async* {
+    updateWith(submitted: true, isLoading: true);
+    try {
+      await auth.signInWithEmailAndPassword(
+        email: _model.email,
+        password: _model.password,
+      );
+    } catch (error) {
+      rethrow;
+    }
   }
 }

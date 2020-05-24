@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
 import 'package:warikan_native/src/services/auth.dart';
-import 'package:warikan_native/src/sign_in/sign_in_bloc.dart';
+import 'package:warikan_native/src/sign_in/bloc/sign_in_bloc.dart';
 import 'package:warikan_native/src/sign_in/sign_in_button.dart';
 import 'package:warikan_native/src/sign_in/sign_in_model.dart';
 
-class SignInFormBlocBased extends StatefulWidget {
-  SignInFormBlocBased({@required this.bloc});
-  final SignInBloc bloc;
-
+class SignInForm extends StatefulWidget {
   static Widget create(BuildContext context) {
     final AuthBase auth = Provider.of<AuthBase>(context);
-    return Provider<SignInBloc>(
-        create: (context) => SignInBloc(auth: auth),
-        child: Consumer<SignInBloc>(
-          builder: (context, bloc, _) => SignInFormBlocBased(bloc: bloc),
-        ),
-        dispose: (context, bloc) => bloc.dispose());
+    return BlocProvider<SignInBloc>(
+      create: (context) => SignInBloc(auth: auth),
+      child: SignInForm(),
+    );
   }
 
   @override
   _SignInFormState createState() => _SignInFormState();
 }
 
-class _SignInFormState extends State<SignInFormBlocBased> {
+class _SignInFormState extends State<SignInForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
@@ -58,10 +54,17 @@ class _SignInFormState extends State<SignInFormBlocBased> {
       ),
       SignInButton(
         text: "ログイン",
-        color: Colors.brown,
+        color: Theme.of(context).primaryColor,
         onPressed: model.canSubmit ? _submit : null,
         textColor: Colors.white,
-      )
+      ),
+      SizedBox(height: 16.0),
+      Text(
+        "新規登録",
+        style: TextStyle(
+          color: Colors.lightBlue,
+        ),
+      ),
     ];
   }
 
@@ -86,10 +89,11 @@ class _SignInFormState extends State<SignInFormBlocBased> {
       controller: _emailController,
       focusNode: _emailFocusNode,
       decoration: InputDecoration(
-          labelText: "email",
-          hintText: "email@example.com",
-          errorText: model.emailErrorText,
-          enabled: !model.isLoading),
+        labelText: "email",
+        hintText: "email@example.com",
+        errorText: model.emailErrorText,
+        enabled: !model.isLoading,
+      ),
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
@@ -101,16 +105,17 @@ class _SignInFormState extends State<SignInFormBlocBased> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<SignInModel>(
-        stream: widget.bloc.modelStream,
-        initialData: SignInModel(),
-        builder: (context, snapshot) {
-          final SignInModel model = snapshot.data;
-          return Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              children: _buildChildren(model),
-            ),
-          );
-        });
+      stream: widget.bloc.modelStream,
+      initialData: SignInModel(),
+      builder: (context, snapshot) {
+        final SignInModel model = snapshot.data;
+        return Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: _buildChildren(model),
+          ),
+        );
+      },
+    );
   }
 }

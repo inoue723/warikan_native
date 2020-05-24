@@ -1,35 +1,43 @@
 import 'package:flutter/material.dart';
-// import 'package:warikan_native/src/sign_in/sign_in_form_bloc_based.dart';
-import 'package:warikan_native/src/sign_in/sign_in_form_change_notifier.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:warikan_native/src/services/auth.dart';
+import 'package:warikan_native/src/sign_in/bloc/sign_in_bloc.dart';
+import 'package:warikan_native/src/sign_in/sign_in_form.dart';
 
 class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var scaffold = Scaffold(
-      appBar: AppBar(
-        title: Text("ログイン"),
-        elevation: 2.0,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 30),
+              _buildContainer(context),
+            ],
+          ),
+        ),
       ),
-      body: _buildContainer(context),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.white,
     );
     return scaffold;
   }
 
   Widget _buildContainer(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          SizedBox(height: 8.0),
-          SingleChildScrollView(
-            child: Card(
-              child: SignInFormChangeNotifier.create(context),
-            ),
+    final AuthBase auth = Provider.of<AuthBase>(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        SizedBox(height: 8.0),
+        SingleChildScrollView(
+          child: BlocProvider<SignInBloc>(
+            create: (context) => SignInBloc(auth: auth),
+            child: SignInForm(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
