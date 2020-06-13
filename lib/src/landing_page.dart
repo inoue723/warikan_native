@@ -25,9 +25,9 @@ class LandingPage extends StatelessWidget {
             child: Consumer<Database>(
               builder: (context, database, child) {
                 return BlocProvider<CostsBloc>(
-                  create: (_) => CostsBloc(database: database)..add(LoadCosts()),
-                  child: CostsPage()
-                );
+                    create: (_) =>
+                        CostsBloc(database: database)..add(LoadCosts()),
+                    child: CostsPage());
               },
             ),
           );

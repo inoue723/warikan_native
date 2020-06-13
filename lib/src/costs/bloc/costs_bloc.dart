@@ -57,9 +57,11 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
       (current, next) => next.paymentDate.compareTo(current.paymentDate),
     );
 
-    final totalCostAmount = flattenCosts
-        .map((cost) => cost.amount)
-        .reduce((value, element) => value + element);
+    final totalCostAmount = flattenCosts.isNotEmpty
+        ? flattenCosts
+            .map((cost) => cost.amount)
+            .reduce((value, element) => value + element)
+        : 0;
 
     double borrowAmount = 0;
     myCosts.forEach((myCost) {
