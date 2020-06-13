@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/costs/edit_cost_page.dart';
-import 'package:warikan_native/src/home/models.dart';
+import 'package:warikan_native/src/models/cost.dart';
+import 'package:warikan_native/src/models/cost_summary.dart';
 import 'package:warikan_native/src/services/database.dart';
 import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
 import 'package:flutter/services.dart';
 
-class CostsSummaryTileModel {
-  CostsSummaryTileModel({
-    @required this.totalCostAmount,
-    @required this.borrowAmount,
-    @required this.costs,
-  });
-  final int totalCostAmount;
-  final int borrowAmount;
-  final List<Cost> costs;
-}
-
 class CostsListContent extends StatelessWidget {
   const CostsListContent({Key key, @required this.model}) : super(key: key);
-  final CostsSummaryTileModel model;
+  final CostsSummary model;
 
   @override
   Widget build(BuildContext context) {

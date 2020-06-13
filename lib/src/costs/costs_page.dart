@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
-import 'package:warikan_native/src/costs/costs_bloc.dart';
+import 'package:warikan_native/src/costs/bloc/index.dart';
 import 'package:warikan_native/src/costs/costs_list.dart';
 import 'package:warikan_native/src/costs/edit_cost_page.dart';
 import 'package:warikan_native/src/services/auth.dart';
@@ -19,7 +19,7 @@ class CostsPage extends StatelessWidget {
 
   Future<void> _confirmSignOut(BuildContext context) async {
     final didRequestSignOut = await PlatformAlertDialog(
-      title: "ログアウト",
+      title: "確認",
       content: "ログアウトしますか？",
       cancelActionText: "いいえ",
       defaultActionText: "はい",
@@ -41,6 +41,7 @@ class CostsPage extends StatelessWidget {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.exit_to_app),
+              color: Colors.black,
               onPressed: () => _confirmSignOut(context),
             )
           ],
@@ -48,7 +49,7 @@ class CostsPage extends StatelessWidget {
       ),
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueAccent[200],
+        backgroundColor: Theme.of(context).primaryColor,
         child: Icon(
           Icons.add,
           color: Colors.white,

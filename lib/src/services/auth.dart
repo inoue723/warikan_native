@@ -1,10 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-
-class User {
-  User({@required this.uid});
-  final String uid;
-}
+import 'package:warikan_native/src/models/user.dart';
 
 abstract class AuthBase {
   Stream<User> get onAuthStateChanged;

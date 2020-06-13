@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:warikan_native/src/common_widgets/custom_swatch.dart';
+import 'package:warikan_native/src/utils/create_material_color.dart';
 import 'package:warikan_native/src/landing_page.dart';
 import 'package:warikan_native/src/services/auth.dart';
 
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       create: (context) => Auth(),
       child: MaterialApp(
         title: "warikan",
-        theme: ThemeData(primarySwatch: customSwatch),
+        theme: ThemeData(primarySwatch: createMaterialColor(Color(0xFF1e68e7))),
         home: LandingPage(),
       ),
     );

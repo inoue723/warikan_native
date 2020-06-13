@@ -6,7 +6,7 @@ class User {
 
   User({
     @required this.uid,
-    @required this.partnerId,
+    this.partnerId,
   });
 
   factory User.fromMap(Map<String, dynamic> data, String documentId) {

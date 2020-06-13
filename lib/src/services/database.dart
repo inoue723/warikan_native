@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:warikan_native/src/home/models.dart';
+import 'package:warikan_native/src/models/cost.dart';
+import 'package:warikan_native/src/models/user.dart';
 import 'package:warikan_native/src/services/api_path.dart';
 import 'package:warikan_native/src/services/firestore_service.dart';
-import 'package:warikan_native/src/services/models/user.dart';
 
 abstract class Database {
   Future<void> setCost(Cost cost);
