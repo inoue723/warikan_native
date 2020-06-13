@@ -13,3 +13,13 @@ class SignInSubmit extends SignInEvent {
   @override
   List<Object> get props => [];
 }
+
+class SignInUpdate extends SignInEvent {
+  final String email;
+  final String password;
+
+  SignInUpdate({this.email, this.password});
+
+  @override
+  List<Object> get props => [];
+}

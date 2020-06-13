@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:warikan_native/src/common_widgets/custom_raised_buddon.dart';
+import 'package:warikan_native/src/common_widgets/loading_button.dart';
 import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
 import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/sign_in/bloc/sign_in_bloc.dart';
 import 'package:warikan_native/src/sign_in/sign_in_button.dart';
-import 'package:warikan_native/src/sign_in/sign_in_model.dart';
 
 class SignInForm extends StatefulWidget {
   static Widget create(BuildContext context) {
@@ -27,95 +28,117 @@ class _SignInFormState extends State<SignInForm> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
-  Future<void> _submit() async {
-    try {
-      await widget.bloc.submit();
-    } on PlatformException catch (error) {
-      PlatformExceptionAlertDialog(
-        title: "ログインに失敗しました",
-        exception: error,
-      ).show(context);
-    }
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<SignInBloc, SignInState>(
+      listener: (context, state) {
+        if (state is SignInError) {
+          PlatformExceptionAlertDialog(
+            title: "ログインに失敗しました",
+            exception: state.error,
+          ).show(context);
+        }
+      },
+      builder: (context, state) {
+        return Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              _buildEmailTextField(state),
+              _buildPasswordTextField(state),
+              SizedBox(
+                height: 16.0,
+              ),
+              _buildSignInButton(state),
+              SizedBox(height: 16.0),
+              Text(
+                "新規登録",
+                style: TextStyle(
+                  color: Colors.lightBlue,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
-  void _emailEditingComplete(SignInModel model) {
-    final newFocus = model.emailValidator.isValid(model.email)
-        ? _passwordFocusNode
-        : _emailFocusNode;
+  void _emailEditingComplete(SignInDefault state) {
+    final newFocus = state.isValidEmail ? _passwordFocusNode : _emailFocusNode;
     FocusScope.of(context).requestFocus(newFocus);
   }
 
-  List<Widget> _buildChildren(SignInModel model) {
-    return [
-      _buildEmailTextField(model),
-      _buildPasswordTextField(model),
-      SizedBox(
-        height: 16.0,
-      ),
-      SignInButton(
-        text: "ログイン",
-        color: Theme.of(context).primaryColor,
-        onPressed: model.canSubmit ? _submit : null,
-        textColor: Colors.white,
-      ),
-      SizedBox(height: 16.0),
-      Text(
-        "新規登録",
-        style: TextStyle(
-          color: Colors.lightBlue,
-        ),
-      ),
-    ];
-  }
-
-  TextField _buildPasswordTextField(SignInModel model) {
+  TextField _buildPasswordTextField(SignInState state) {
+    final SignInDefault defaultState = state is SignInDefault ? state : null;
     return TextField(
       controller: _passwordController,
       focusNode: _passwordFocusNode,
       decoration: InputDecoration(
         labelText: "password",
-        errorText: model.passwordErrorText,
-        enabled: !model.isLoading,
+        errorText: defaultState?.passwordErrorText,
       ),
       obscureText: true,
       textInputAction: TextInputAction.done,
-      onChanged: widget.bloc.updatePassword,
-      onEditingComplete: _submit,
+      onChanged: (password) {
+        context.bloc<SignInBloc>().add(
+              SignInUpdate(
+                email: _emailController.text,
+                password: password,
+              ),
+            );
+      },
     );
   }
 
-  TextField _buildEmailTextField(SignInModel model) {
+  TextField _buildEmailTextField(SignInState state) {
+    final SignInDefault defaultState = state is SignInDefault ? state : null;
     return TextField(
       controller: _emailController,
       focusNode: _emailFocusNode,
       decoration: InputDecoration(
         labelText: "email",
         hintText: "email@example.com",
-        errorText: model.emailErrorText,
-        enabled: !model.isLoading,
+        errorText: defaultState?.emailErrorText,
       ),
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      onChanged: widget.bloc.updateEmail,
-      onEditingComplete: () => _emailEditingComplete(model),
+      onChanged: (email) {
+        context.bloc<SignInBloc>().add(
+              SignInUpdate(
+                email: email,
+                password: _passwordController.text,
+              ),
+            );
+      },
+      onEditingComplete: () => _emailEditingComplete(defaultState),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<SignInModel>(
-      stream: widget.bloc.modelStream,
-      initialData: SignInModel(),
-      builder: (context, snapshot) {
-        final SignInModel model = snapshot.data;
-        return Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: _buildChildren(model),
-          ),
-        );
-      },
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildSignInButton(SignInState state) {
+    if (state is SignInSubmitting) {
+      return LoadingButton();
+    }
+    return SignInButton(
+      text: "ログイン",
+      color: Theme.of(context).primaryColor,
+      onPressed: state.canSubmit
+          ? () => context.bloc<SignInBloc>().add(
+                SignInSubmit(
+                  email: _emailController.text,
+                  password: _passwordController.text,
+                ),
+              )
+          : null,
+      textColor: Colors.white,
     );
   }
 }
