@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/costs/edit_cost_page.dart';
 import 'package:warikan_native/src/costs/empty_content.dart';
+import 'package:warikan_native/src/invitation/bloc/invitation_bloc.dart';
 import 'package:warikan_native/src/models/cost.dart';
 import 'package:warikan_native/src/models/cost_summary.dart';
 import 'package:warikan_native/src/services/database.dart';
@@ -22,23 +24,7 @@ class CostsListContent extends StatelessWidget {
       children: [
         Column(
           children: <Widget>[
-            RichText(
-              text: TextSpan(
-                style: TextStyle(color: Colors.grey, fontSize: 14),
-                children: [
-                  TextSpan(
-                    text: model.borrowAmount < 0 ? "貸してる" : "借りてる",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  TextSpan(
-                    text: "金額",
-                  )
-                ],
-              ),
-            ),
+            _buildSummaryLabel(),
             _buildLendOrBorrowAmountText(),
           ]..addAll(_buildCostList(context)),
         )
@@ -46,24 +32,48 @@ class CostsListContent extends StatelessWidget {
     );
   }
 
-  RichText _buildLendOrBorrowAmountText() {
-    final amount = model.borrowAmount.isNegative
-        ? model.borrowAmount * -1
-        : model.borrowAmount;
-    final color = model.borrowAmount > 0 ? Colors.red : Colors.green;
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: "$amount",
-            style: TextStyle(fontSize: 20, color: color),
+  Widget _buildLendOrBorrowAmountText() {
+    return BlocBuilder<InvitationBloc, InvitationState>(
+      builder: (context, state) {
+        if (state is InvitationNotInvited) {
+          return RichText(
+            text: TextSpan(
+              style: TextStyle(fontSize: 16, color: Colors.black87),
+              children: [
+                TextSpan(
+                  text: "合計 ",
+                ),
+                TextSpan(
+                  text: "${model.totalCostAmount}",
+                  style: TextStyle(fontSize: 20, color: Colors.green),
+                ),
+                TextSpan(
+                  text: "円",
+                ),
+              ],
+            ),
+          );
+        }
+
+        final amount = model.borrowAmount.isNegative
+            ? model.borrowAmount * -1
+            : model.borrowAmount;
+        final color = model.borrowAmount > 0 ? Colors.red : Colors.green;
+        return RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "$amount",
+                style: TextStyle(fontSize: 20, color: color),
+              ),
+              TextSpan(
+                text: "円",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+            ],
           ),
-          TextSpan(
-            text: "円",
-            style: TextStyle(fontSize: 16, color: Colors.black87),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -99,6 +109,33 @@ class CostsListContent extends StatelessWidget {
               context,
               cost: cost,
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSummaryLabel() {
+    return BlocBuilder<InvitationBloc, InvitationState>(
+      builder: (context, state) {
+        if (state is InvitationNotInvited) {
+          return Text("相手を招待しましょう");
+        }
+        return RichText(
+          text: TextSpan(
+            style: TextStyle(color: Colors.grey, fontSize: 14),
+            children: [
+              TextSpan(
+                text: model.borrowAmount < 0 ? "貸してる" : "借りてる",
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black54,
+                ),
+              ),
+              TextSpan(
+                text: "金額",
+              )
+            ],
           ),
         );
       },

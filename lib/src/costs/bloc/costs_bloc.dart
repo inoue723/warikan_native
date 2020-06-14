@@ -8,12 +8,13 @@ import 'package:warikan_native/src/costs/bloc/costs_state.dart';
 import 'package:warikan_native/src/models/burden_rate.dart';
 import 'package:warikan_native/src/models/cost.dart';
 import 'package:warikan_native/src/models/cost_summary.dart';
-import 'package:warikan_native/src/models/user.dart';
 import 'package:warikan_native/src/services/database.dart';
 
 class CostsBloc extends Bloc<CostsEvent, CostsState> {
-  CostsBloc({@required this.database});
   final Database database;
+  final String partnerId;
+
+  CostsBloc({@required this.database, @required this.partnerId});
   StreamSubscription _subscription;
 
   @override
@@ -30,8 +31,7 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
 
   Stream<CostsState> _mapLoadCostsToState() async* {
     _subscription?.cancel();
-    final User user = await database.getMyUserInfo();
-    _subscription = _totalCostsStream(user.partnerId)
+    _subscription = _totalCostsStream(partnerId)
         .listen((costs) => add(CostsUpdated(costs)));
   }
 
