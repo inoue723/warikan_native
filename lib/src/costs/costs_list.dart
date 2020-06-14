@@ -18,21 +18,23 @@ class CostsListContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        _buildSummaryLabel(),
-        _buildLendOrBorrowAmountText(),
-        if (model.costs.isEmpty)
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          _buildSummaryLabel(),
+          _buildLendOrBorrowAmountText(),
+          if (model.costs.isEmpty)
+            Column(
+              children: [
+                SizedBox(height: 200),
+                EmptyContent(),
+              ],
+            ),
           Column(
-            children: [
-              SizedBox(height: 200),
-              EmptyContent(),
-            ],
-          ),
-        Column(
-          children: _buildCostList(context),
-        )
-      ],
+            children: _buildCostList(context),
+          )
+        ],
+      ),
     );
   }
 
