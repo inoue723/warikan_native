@@ -31,20 +31,7 @@ class LandingPage extends StatelessWidget {
                     ..add(
                       InvitationInit(),
                     ),
-                  child: BlocConsumer<InvitationBloc, InvitationState>(
-                    listener: (context, state) {
-                      if (state is InvitationNotInvited) {
-                        showDialog(
-                          context: context,
-                          child: PlatformAlertDialog(
-                            title: "割り勘する相手を招待しましょう",
-                            content: "",
-                            defaultActionText: "招待する",
-                            cancelActionText: "キャンセル",
-                          ),
-                        );
-                      }
-                    },
+                  child: BlocBuilder<InvitationBloc, InvitationState>(
                     builder: (context, state) {
                       if (state is InvitationInvited) {
                         return BlocProvider<CostsBloc>(

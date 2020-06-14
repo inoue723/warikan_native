@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:warikan_native/src/common_widgets/custom_raised_buddon.dart';
 import 'package:warikan_native/src/costs/edit_cost_page.dart';
 import 'package:warikan_native/src/costs/empty_content.dart';
 import 'package:warikan_native/src/invitation/bloc/invitation_bloc.dart';
+import 'package:warikan_native/src/invitation/invitation_page.dart';
 import 'package:warikan_native/src/models/cost.dart';
 import 'package:warikan_native/src/models/cost_summary.dart';
 import 'package:warikan_native/src/services/database.dart';
@@ -16,17 +18,19 @@ class CostsListContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (model.costs.isEmpty) {
-      return EmptyContent();
-    }
-
-    return ListView(
-      children: [
+    return Column(
+      children: <Widget>[
+        _buildSummaryLabel(),
+        _buildLendOrBorrowAmountText(),
+        if (model.costs.isEmpty)
+          Column(
+            children: [
+              SizedBox(height: 200),
+              EmptyContent(),
+            ],
+          ),
         Column(
-          children: <Widget>[
-            _buildSummaryLabel(),
-            _buildLendOrBorrowAmountText(),
-          ]..addAll(_buildCostList(context)),
+          children: _buildCostList(context),
         )
       ],
     );
@@ -35,6 +39,7 @@ class CostsListContent extends StatelessWidget {
   Widget _buildLendOrBorrowAmountText() {
     return BlocBuilder<InvitationBloc, InvitationState>(
       builder: (context, state) {
+        if (model.costs.isEmpty) return Container();
         if (state is InvitationNotInvited) {
           return RichText(
             text: TextSpan(
@@ -119,7 +124,24 @@ class CostsListContent extends StatelessWidget {
     return BlocBuilder<InvitationBloc, InvitationState>(
       builder: (context, state) {
         if (state is InvitationNotInvited) {
-          return Text("相手を招待しましょう");
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            child: CustomeRaisedButton(
+              child: Text(
+                "相手を招待しましょう",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => InvitationPage()),
+                );
+              },
+              color: Theme.of(context).primaryColor,
+            ),
+          );
         }
         return RichText(
           text: TextSpan(
