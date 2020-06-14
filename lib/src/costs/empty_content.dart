@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class EmptyContent extends StatelessWidget {
-  const EmptyContent(
-      {Key key,
-      this.title = "コンテンツがありません",
-      this.message = "＋ボタンからアイテムを作成してください"})
-      : super(key: key);
+  const EmptyContent({
+    Key key,
+    this.title = "記録がありません",
+    this.message = "＋ボタンから記録してください",
+  }) : super(key: key);
   final String title;
   final String message;
 
