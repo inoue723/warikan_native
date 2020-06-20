@@ -7,6 +7,7 @@ import 'package:warikan_native/src/models/user.dart';
 import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
 import 'package:warikan_native/src/sign_in/sign_in_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -24,10 +25,28 @@ class LandingPage extends StatelessWidget {
             create: (_) => FirestoreDatabase(uid: user.uid),
             child: Consumer<Database>(
               builder: (context, database, child) {
-                return BlocProvider<CostsBloc>(
-                  create: (_) => CostsBloc(database: database)..add(LoadCosts()),
-                  child: CostsPage()
+                final FirebaseMessaging _firebaseMessaging =
+                    FirebaseMessaging();
+                _firebaseMessaging.requestNotificationPermissions();
+                _firebaseMessaging.getToken().then((token) => print(token));
+
+                _firebaseMessaging.configure(
+                  onMessage: (Map<String, dynamic> message) {
+                    print('Received notification: $message');
+                  },
+                  onResume: (Map<String, dynamic> message) {
+                    print('on resume $message');
+                    return;
+                  },
+                  onLaunch: (Map<String, dynamic> message) {
+                    print('on launch $message');
+                    return;
+                  },
                 );
+                return BlocProvider<CostsBloc>(
+                    create: (_) =>
+                        CostsBloc(database: database)..add(LoadCosts()),
+                    child: CostsPage());
               },
             ),
           );
