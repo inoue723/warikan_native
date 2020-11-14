@@ -7,8 +7,13 @@ abstract class SignInEvent extends Equatable {
 class SignInSubmit extends SignInEvent {
   final String email;
   final String password;
+  final SignInFormType formType;
 
-  SignInSubmit({@required this.email, @required this.password});
+  SignInSubmit({
+    @required this.email,
+    @required this.password,
+    @required this.formType,
+  });
 
   @override
   List<Object> get props => [];

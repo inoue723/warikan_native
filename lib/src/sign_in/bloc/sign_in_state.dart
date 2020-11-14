@@ -18,7 +18,10 @@ class SignInDefault extends SignInState with EmailAndPasswordValidators {
   String get passwordErrorText =>
       isValidPassword ? null : invalidPasswordErrorText;
 
-  SignInDefault({this.email = "", this.password = ""});
+  SignInDefault({
+    this.email = "",
+    this.password = "",
+  });
 
   @override
   List<Object> get props => [email, password];

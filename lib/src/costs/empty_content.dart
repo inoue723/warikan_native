@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class EmptyContent extends StatelessWidget {
-  const EmptyContent(
-      {Key key,
-      this.title = "コンテンツがありません",
-      this.message = "＋ボタンからアイテムを作成してください"})
-      : super(key: key);
+  const EmptyContent({
+    Key key,
+    this.title = "",
+    this.message = "＋ボタンから記録してみましょう",
+  }) : super(key: key);
   final String title;
   final String message;
 
@@ -14,6 +14,7 @@ class EmptyContent extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(
             title,
@@ -26,7 +27,7 @@ class EmptyContent extends StatelessWidget {
             message,
             style: TextStyle(
               color: Colors.black45,
-              fontSize: 16,
+              fontSize: 20,
             ),
           ),
         ],

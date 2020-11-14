@@ -1,23 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:warikan_native/src/common_widgets/custom_raised_buddon.dart';
 import 'package:warikan_native/src/common_widgets/loading_button.dart';
 import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
-import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/sign_in/bloc/sign_in_bloc.dart';
 import 'package:warikan_native/src/sign_in/sign_in_button.dart';
+import 'package:warikan_native/src/sign_in/sign_in_form_type.dart';
 
 class SignInForm extends StatefulWidget {
-  static Widget create(BuildContext context) {
-    final AuthBase auth = Provider.of<AuthBase>(context);
-    return BlocProvider<SignInBloc>(
-      create: (context) => SignInBloc(auth: auth),
-      child: SignInForm(),
-    );
-  }
-
   @override
   _SignInFormState createState() => _SignInFormState();
 }
@@ -27,6 +17,13 @@ class _SignInFormState extends State<SignInForm> {
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+  SignInFormType _formType;
+
+  @override
+  void initState() {
+    super.initState();
+    _formType = SignInFormType.signIn;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +31,7 @@ class _SignInFormState extends State<SignInForm> {
       listener: (context, state) {
         if (state is SignInError) {
           PlatformExceptionAlertDialog(
-            title: "ログインに失敗しました",
+            title: "${_formType.submitButtonName}に失敗しました",
             exception: state.error,
           ).show(context);
         }
@@ -51,10 +48,17 @@ class _SignInFormState extends State<SignInForm> {
               ),
               _buildSignInButton(state),
               SizedBox(height: 16.0),
-              Text(
-                "新規登録",
-                style: TextStyle(
-                  color: Colors.lightBlue,
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _formType = _formType.anotherType;
+                  });
+                },
+                child: Text(
+                  _formType.anotherType.submitButtonName,
+                  style: TextStyle(
+                    color: Colors.lightBlue,
+                  ),
                 ),
               ),
             ],
@@ -128,13 +132,14 @@ class _SignInFormState extends State<SignInForm> {
       return LoadingButton();
     }
     return SignInButton(
-      text: "ログイン",
+      text: _formType.submitButtonName,
       color: Theme.of(context).primaryColor,
       onPressed: state.canSubmit
           ? () => context.bloc<SignInBloc>().add(
                 SignInSubmit(
                   email: _emailController.text,
                   password: _passwordController.text,
+                  formType: _formType,
                 ),
               )
           : null,
