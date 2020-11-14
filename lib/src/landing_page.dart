@@ -33,32 +33,24 @@ class LandingPage extends StatelessWidget {
                     ),
                   child: BlocBuilder<InvitationBloc, InvitationState>(
                     builder: (context, state) {
-                      if (state is InvitationInvited) {
-                        return BlocProvider<CostsBloc>(
-                          create: (context) {
-                            return CostsBloc(
-                              database: database,
-                              partnerId: state.partnerId,
-                            )..add(LoadCosts());
-                          },
-                          child: CostsPage(),
-                        );
-                      } else if (state is InvitationNotInvited) {
-                        return BlocProvider<CostsBloc>(
-                          create: (context) {
-                            return CostsBloc(
-                              database: database,
-                              partnerId: null,
-                            )..add(LoadCosts());
-                          },
-                          child: CostsPage(),
+                      if (state is InvitationInitial) {
+                        return Scaffold(
+                          body: Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         );
                       }
 
-                      return Scaffold(
-                        body: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      return BlocProvider<CostsBloc>(
+                        create: (context) {
+                          return CostsBloc(
+                            database: database,
+                            partnerId: state is InvitationInvited
+                                ? state.partnerId
+                                : null,
+                          )..add(LoadCosts());
+                        },
+                        child: CostsPage(),
                       );
                     },
                   ),

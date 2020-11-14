@@ -138,7 +138,12 @@ class CostsListContent extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => InvitationPage()),
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<InvitationBloc>(context),
+                      child: InvitationPage(),
+                    ),
+                  ),
                 );
               },
               color: Theme.of(context).primaryColor,
