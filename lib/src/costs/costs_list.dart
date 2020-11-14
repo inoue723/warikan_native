@@ -11,6 +11,7 @@ import 'package:warikan_native/src/models/cost_summary.dart';
 import 'package:warikan_native/src/services/database.dart';
 import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
 import 'package:flutter/services.dart';
+import 'package:warikan_native/src/costs/cost_date_list_item.dart';
 
 class CostsListContent extends StatelessWidget {
   const CostsListContent({Key key, @required this.model}) : super(key: key);
@@ -97,29 +98,32 @@ class CostsListContent extends StatelessWidget {
   }
 
   Iterable<Widget> _buildCostList(BuildContext context) {
-    return List.generate(
-      model.costs.length,
-      (index) {
-        final cost = model.costs[index];
-        return Dismissible(
-          key: Key("cost-${cost.id}"),
-          background: Container(
-            color: Colors.red,
-          ),
-          direction: DismissDirection.endToStart,
-          onDismissed: (direction) => _delete(context, cost),
-          child: ListTile(
-            title: Text("${cost.amount}円"),
-            subtitle: Text(cost.category),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () => EditCostPage.show(
-              context,
-              cost: cost,
-            ),
-          ),
-        );
-      },
-    );
+    return List.generate(7, (index) {
+      return CostDateListItem(date: "11/${30 - index}（日）");
+    });
+    // return List.generate(
+    //   model.costs.length,
+    //   (index) {
+    //     final cost = model.costs[index];
+    //     return Dismissible(
+    //       key: Key("cost-${cost.id}"),
+    //       background: Container(
+    //         color: Colors.red,
+    //       ),
+    //       direction: DismissDirection.endToStart,
+    //       onDismissed: (direction) => _delete(context, cost),
+    //       child: ListTile(
+    //         title: Text("${cost.amount}円"),
+    //         subtitle: Text(cost.category),
+    //         trailing: Icon(Icons.chevron_right),
+    //         onTap: () => EditCostPage.show(
+    //           context,
+    //           cost: cost,
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   Widget _buildSummaryLabel() {
