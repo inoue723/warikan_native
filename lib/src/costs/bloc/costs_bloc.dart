@@ -14,11 +14,9 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
   final Database database;
   final String partnerId;
 
-  CostsBloc({@required this.database, @required this.partnerId});
+  CostsBloc({@required this.database, @required this.partnerId})
+      : super(CostsLoading());
   StreamSubscription _subscription;
-
-  @override
-  CostsState get initialState => CostsLoading();
 
   @override
   Stream<CostsState> mapEventToState(CostsEvent event) async* {

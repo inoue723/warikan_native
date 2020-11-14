@@ -4,19 +4,27 @@ import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/custom_radio_button.dart';
 import 'package:warikan_native/src/models/burden_rate.dart';
 import 'package:warikan_native/src/models/cost.dart';
+import 'package:warikan_native/src/models/user.dart';
+import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
 
 class EditCostPage extends StatefulWidget {
-  const EditCostPage({Key key, @required this.database, this.cost})
+  const EditCostPage(
+      {Key key, @required this.database, this.cost, this.myUserInfo})
       : super(key: key);
   final Database database;
   final Cost cost;
+  final User myUserInfo;
 
   static Future<void> show(BuildContext context, {Cost cost}) async {
     final database = Provider.of<Database>(context, listen: false);
+    final myUserInfo =
+        Provider.of<AuthBase>(context, listen: false).currentUser();
+
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => EditCostPage(database: database, cost: cost),
+        builder: (context) => EditCostPage(
+            database: database, cost: cost, myUserInfo: myUserInfo),
         fullscreenDialog: true,
       ),
     );
@@ -30,6 +38,7 @@ class _EditCostPageState extends State<EditCostPage> {
   bool _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
+  String _uid;
   int _amount;
   String _category;
   DateTime _paymentDate = DateTime.now();
@@ -40,7 +49,12 @@ class _EditCostPageState extends State<EditCostPage> {
   @override
   void initState() {
     super.initState();
+    // if creating
+    _uid = widget.myUserInfo.uid;
+
+    // if updating
     if (widget.cost != null) {
+      _uid = widget.cost.uid;
       _amount = widget.cost.amount;
       _category = widget.cost.category;
       _paymentDate = widget.cost.paymentDate;
@@ -72,6 +86,7 @@ class _EditCostPageState extends State<EditCostPage> {
       final id = widget.cost?.id ?? widget.database.documentIdFromCurrentDate();
       final cost = Cost(
         id: id,
+        uid: _uid,
         amount: _amount,
         category: _category,
         paymentDate: _paymentDate,

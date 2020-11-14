@@ -14,10 +14,7 @@ part 'sign_in_state.dart';
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final AuthBase auth;
 
-  SignInBloc({@required this.auth});
-
-  @override
-  SignInState get initialState => SignInDefault();
+  SignInBloc({@required this.auth}) : super(SignInDefault());
 
   @override
   Stream<SignInState> mapEventToState(SignInEvent event) async* {

@@ -5,18 +5,21 @@ import 'package:warikan_native/src/models/burden_rate.dart';
 class Cost {
   Cost({
     @required this.id,
+    @required this.uid,
     @required this.amount,
     @required this.category,
     @required this.paymentDate,
     @required this.burdenRate,
   });
   final String id;
+  final String uid;
   final int amount;
   final String category;
   final DateTime paymentDate;
   final BurdenRate burdenRate;
 
-  factory Cost.fromMap(Map<String, dynamic> data, String documentId) {
+  factory Cost.fromMap(
+      Map<String, dynamic> data, String documentId, String uid) {
     if (data == null) {
       return null;
     }
@@ -32,6 +35,7 @@ class Cost {
 
     return Cost(
       id: documentId,
+      uid: uid,
       amount: amount,
       category: category,
       paymentDate: paymentDate,
