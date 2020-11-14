@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:warikan_native/src/costs/bloc/costs_bloc.dart';
 import 'package:warikan_native/src/models/cost.dart';
 
 class CostDateListItem extends StatelessWidget {
-  CostDateListItem({@required this.date, @required this.costs});
-  final String date;
-  final List<Cost> costs;
+  CostDateListItem({this.dateCosts});
+  final DateCosts dateCosts;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class CostDateListItem extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            date,
+            dateCosts.date,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           IconButton(

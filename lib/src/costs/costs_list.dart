@@ -98,8 +98,8 @@ class CostsListContent extends StatelessWidget {
   }
 
   Iterable<Widget> _buildCostList(BuildContext context) {
-    return List.generate(7, (index) {
-      return CostDateListItem(date: "11/${30 - index}（日）");
+    return List.generate(model.dateList.length, (index) {
+      return CostDateListItem(dateCosts: model.dateList[index]);
     });
     // return List.generate(
     //   model.costs.length,
