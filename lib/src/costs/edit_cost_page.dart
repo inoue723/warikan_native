@@ -148,7 +148,7 @@ class _EditCostPageState extends State<EditCostPage> {
                     SizedBox(height: 10.0),
                     _buildSubmitButton(),
                     SizedBox(height: 10.0),
-                    _buildDeleteButton(),
+                    if (widget.cost?.id != null) _buildDeleteButton(),
                   ],
                 ),
               ),
@@ -258,9 +258,6 @@ class _EditCostPageState extends State<EditCostPage> {
   }
 
   Widget _buildDeleteButton() {
-    if (widget.cost.id.isEmpty) {
-      return null;
-    }
     return GestureDetector(
       onTap: () => _delete(),
       child: Row(
@@ -282,7 +279,7 @@ class _EditCostPageState extends State<EditCostPage> {
 
   Future<void> _delete() async {
     final didRequestDelete = await PlatformAlertDialog(
-      title: "確認",
+      title: "",
       content: "削除しますか？",
       cancelActionText: "いいえ",
       defaultActionText: "はい",
