@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/custom_radio_button.dart';
+import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
+import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
 import 'package:warikan_native/src/models/burden_rate.dart';
 import 'package:warikan_native/src/models/cost.dart';
 import 'package:warikan_native/src/models/user.dart';
@@ -139,7 +142,15 @@ class _EditCostPageState extends State<EditCostPage> {
             SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: _buildForm(),
+                child: Column(
+                  children: [
+                    _buildForm(),
+                    SizedBox(height: 10.0),
+                    _buildSubmitButton(),
+                    SizedBox(height: 10.0),
+                    _buildDeleteButton(),
+                  ],
+                ),
               ),
             ),
           ],
@@ -151,15 +162,7 @@ class _EditCostPageState extends State<EditCostPage> {
   Widget _buildForm() {
     return Form(
       key: _formKey,
-      child: Column(
-        children: _buildFormChildren()
-          ..addAll(
-            [
-              SizedBox(height: 10.0),
-              _buildSubmitButton(),
-            ],
-          ),
-      ),
+      child: Column(children: _buildFormChildren()),
     );
   }
 
@@ -252,5 +255,49 @@ class _EditCostPageState extends State<EditCostPage> {
         )
       ],
     );
+  }
+
+  Widget _buildDeleteButton() {
+    if (widget.cost.id.isEmpty) {
+      return null;
+    }
+    return GestureDetector(
+      onTap: () => _delete(),
+      child: Row(
+        children: [
+          Icon(
+            Icons.delete,
+          ),
+          Text(
+            "削除する",
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+        ],
+        mainAxisAlignment: MainAxisAlignment.center,
+      ),
+    );
+  }
+
+  Future<void> _delete() async {
+    final didRequestDelete = await PlatformAlertDialog(
+      title: "確認",
+      content: "削除しますか？",
+      cancelActionText: "いいえ",
+      defaultActionText: "はい",
+    ).show(context);
+
+    if (didRequestDelete) {
+      try {
+        await widget.database.deleteCost(widget.cost);
+        Navigator.of(context).pop();
+      } on PlatformException catch (err) {
+        PlatformExceptionAlertDialog(
+          title: "削除に失敗しました",
+          exception: err,
+        );
+      }
+    }
   }
 }
