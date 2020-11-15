@@ -85,7 +85,7 @@ class _SignInFormState extends State<SignInForm> {
       obscureText: true,
       textInputAction: TextInputAction.done,
       onChanged: (password) {
-        context.bloc<SignInBloc>().add(
+        context.read<SignInBloc>().add(
               SignInUpdate(
                 email: _emailController.text,
                 password: password,
@@ -109,7 +109,7 @@ class _SignInFormState extends State<SignInForm> {
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       onChanged: (email) {
-        context.bloc<SignInBloc>().add(
+        context.read<SignInBloc>().add(
               SignInUpdate(
                 email: email,
                 password: _passwordController.text,
@@ -135,7 +135,7 @@ class _SignInFormState extends State<SignInForm> {
       text: _formType.submitButtonName,
       color: Theme.of(context).primaryColor,
       onPressed: state.canSubmit
-          ? () => context.bloc<SignInBloc>().add(
+          ? () => context.read<SignInBloc>().add(
                 SignInSubmit(
                   email: _emailController.text,
                   password: _passwordController.text,

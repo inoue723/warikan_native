@@ -10,10 +10,7 @@ part 'invitation_state.dart';
 class InvitationBloc extends Bloc<InvitationEvent, InvitationState> {
   final Database database;
 
-  InvitationBloc(this.database);
-
-  @override
-  InvitationState get initialState => InvitationInitial();
+  InvitationBloc(this.database) : super(InvitationInitial());
 
   @override
   Stream<InvitationState> mapEventToState(

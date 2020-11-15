@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:warikan_native/src/models/user.dart';
+import 'package:warikan_native/src/models/user.dart' as AppUserModel;
 import 'package:warikan_native/src/services/api_path.dart';
 import 'package:warikan_native/src/services/firestore_service.dart';
 
 abstract class AuthBase {
-  Stream<User> get onAuthStateChanged;
-  Future<User> currentUser();
-  Future<User> signInWithEmailAndPassword({String email, String password});
-  Future<User> createUserWithEmailAndPassword(
+  Stream<AppUserModel.User> get onAuthStateChanged;
+  AppUserModel.User currentUser();
+  Future<AppUserModel.User> signInWithEmailAndPassword(
+      {String email, String password});
+  Future<AppUserModel.User> createUserWithEmailAndPassword(
     String email,
     String password,
   );
@@ -18,26 +19,26 @@ class Auth implements AuthBase {
   final _firebaseAuth = FirebaseAuth.instance;
   final _firestore = FirestoreService.instance;
 
-  User _userFromFirebase(FirebaseUser user) {
+  AppUserModel.User _userFromFirebase(User user) {
     if (user == null) {
       return null;
     }
-    return User(uid: user.uid);
+    return AppUserModel.User(uid: user.uid);
   }
 
   @override
-  Stream<User> get onAuthStateChanged {
-    return _firebaseAuth.onAuthStateChanged.map(_userFromFirebase);
+  Stream<AppUserModel.User> get onAuthStateChanged {
+    return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
   @override
-  Future<User> currentUser() async {
-    final user = await _firebaseAuth.currentUser();
+  AppUserModel.User currentUser() {
+    final user = _firebaseAuth.currentUser;
     return _userFromFirebase(user);
   }
 
   @override
-  Future<User> signInWithEmailAndPassword({
+  Future<AppUserModel.User> signInWithEmailAndPassword({
     String email,
     String password,
   }) async {
@@ -49,7 +50,7 @@ class Auth implements AuthBase {
   }
 
   @override
-  Future<User> createUserWithEmailAndPassword(
+  Future<AppUserModel.User> createUserWithEmailAndPassword(
     String email,
     String password,
   ) async {

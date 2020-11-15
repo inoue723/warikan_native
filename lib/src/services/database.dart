@@ -14,8 +14,7 @@ abstract class Database {
 }
 
 class FirestoreDatabase implements Database {
-  FirestoreDatabase({@required this.uid})
-      : assert(uid != null);
+  FirestoreDatabase({@required this.uid}) : assert(uid != null);
   final String uid;
   final _service = FirestoreService.instance;
 
@@ -24,25 +23,27 @@ class FirestoreDatabase implements Database {
 
   @override
   Future<void> setCost(Cost cost) async => _service.setData(
-        path: APIPath.cost(uid, cost.id),
+        path: APIPath.cost(cost.uid, cost.id),
         data: cost.toMap(),
       );
 
   @override
   Future<void> deleteCost(Cost cost) async => _service.deleteData(
-        path: APIPath.cost(uid, cost.id),
+        path: APIPath.cost(cost.uid, cost.id),
       );
 
   @override
   Stream<List<Cost>> myCostsStream() => _service.collectionStream(
         path: APIPath.costs(uid),
-        builder: (data, documentId) => Cost.fromMap(data, documentId),
+        builder: (data, documentId) => Cost.fromMap(data, documentId, uid),
       );
 
   @override
-  Stream<List<Cost>> costsStream(String partnerUid) => _service.collectionStream(
+  Stream<List<Cost>> costsStream(String partnerUid) =>
+      _service.collectionStream(
         path: APIPath.costs(partnerUid),
-        builder: (data, documentId) => Cost.fromMap(data, documentId),
+        builder: (data, documentId) =>
+            Cost.fromMap(data, documentId, partnerUid),
       );
 
   @override

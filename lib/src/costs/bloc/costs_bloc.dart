@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:date_format/date_format.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
@@ -14,11 +15,9 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
   final Database database;
   final String partnerId;
 
-  CostsBloc({@required this.database, @required this.partnerId});
+  CostsBloc({@required this.database, @required this.partnerId})
+      : super(CostsLoading());
   StreamSubscription _subscription;
-
-  @override
-  CostsState get initialState => CostsLoading();
 
   @override
   Stream<CostsState> mapEventToState(CostsEvent event) async* {
@@ -73,10 +72,34 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
           (partnerCost.burdenRate?.partnerRate ?? BurdenRate.evenRate);
     });
 
+    List<DateCosts> dateList = [];
+    flattenCosts.forEach((cost) {
+      final formattedDate =
+          formatDate(cost.paymentDate, [yyyy, "-", mm, "-", dd]);
+      final dateCosts = dateList.firstWhere(
+        (dateCosts) => dateCosts.date == formattedDate,
+        orElse: () {
+          final newDateCosts = DateCosts(date: formattedDate);
+          dateList.add(newDateCosts);
+          return newDateCosts;
+        },
+      );
+
+      dateCosts.costs.add(cost);
+    });
+
     return CostsSummary(
       costs: flattenCosts,
+      dateList: dateList,
       totalCostAmount: totalCostAmount,
       borrowAmount: borrowAmount.round(),
     );
   }
+}
+
+class DateCosts {
+  final String date;
+  List<Cost> costs = [];
+
+  DateCosts({this.date});
 }

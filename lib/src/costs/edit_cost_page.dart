@@ -1,22 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/custom_radio_button.dart';
+import 'package:warikan_native/src/common_widgets/platform_alert_dialog.dart';
+import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
 import 'package:warikan_native/src/models/burden_rate.dart';
 import 'package:warikan_native/src/models/cost.dart';
+import 'package:warikan_native/src/models/user.dart';
+import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
 
 class EditCostPage extends StatefulWidget {
-  const EditCostPage({Key key, @required this.database, this.cost})
-      : super(key: key);
+  const EditCostPage({
+    Key key,
+    @required this.database,
+    this.cost,
+    @required this.myUserInfo,
+  }) : super(key: key);
   final Database database;
   final Cost cost;
+  final User myUserInfo;
 
   static Future<void> show(BuildContext context, {Cost cost}) async {
     final database = Provider.of<Database>(context, listen: false);
+    final myUserInfo =
+        Provider.of<AuthBase>(context, listen: false).currentUser();
+
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => EditCostPage(database: database, cost: cost),
+        builder: (context) => EditCostPage(
+            database: database, cost: cost, myUserInfo: myUserInfo),
         fullscreenDialog: true,
       ),
     );
@@ -30,6 +44,7 @@ class _EditCostPageState extends State<EditCostPage> {
   bool _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
+  String _uid;
   int _amount;
   String _category;
   DateTime _paymentDate = DateTime.now();
@@ -40,7 +55,10 @@ class _EditCostPageState extends State<EditCostPage> {
   @override
   void initState() {
     super.initState();
+    _uid = widget.myUserInfo.uid;
+
     if (widget.cost != null) {
+      _uid = widget.cost.uid;
       _amount = widget.cost.amount;
       _category = widget.cost.category;
       _paymentDate = widget.cost.paymentDate;
@@ -72,6 +90,7 @@ class _EditCostPageState extends State<EditCostPage> {
       final id = widget.cost?.id ?? widget.database.documentIdFromCurrentDate();
       final cost = Cost(
         id: id,
+        uid: _uid,
         amount: _amount,
         category: _category,
         paymentDate: _paymentDate,
@@ -123,7 +142,15 @@ class _EditCostPageState extends State<EditCostPage> {
             SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: _buildForm(),
+                child: Column(
+                  children: [
+                    _buildForm(),
+                    SizedBox(height: 10.0),
+                    _buildSubmitButton(),
+                    SizedBox(height: 10.0),
+                    _buildDeleteButton(),
+                  ],
+                ),
               ),
             ),
           ],
@@ -135,15 +162,7 @@ class _EditCostPageState extends State<EditCostPage> {
   Widget _buildForm() {
     return Form(
       key: _formKey,
-      child: Column(
-        children: _buildFormChildren()
-          ..addAll(
-            [
-              SizedBox(height: 10.0),
-              _buildSubmitButton(),
-            ],
-          ),
-      ),
+      child: Column(children: _buildFormChildren()),
     );
   }
 
@@ -236,5 +255,49 @@ class _EditCostPageState extends State<EditCostPage> {
         )
       ],
     );
+  }
+
+  Widget _buildDeleteButton() {
+    if (widget.cost.id.isEmpty) {
+      return null;
+    }
+    return GestureDetector(
+      onTap: () => _delete(),
+      child: Row(
+        children: [
+          Icon(
+            Icons.delete,
+          ),
+          Text(
+            "削除する",
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+        ],
+        mainAxisAlignment: MainAxisAlignment.center,
+      ),
+    );
+  }
+
+  Future<void> _delete() async {
+    final didRequestDelete = await PlatformAlertDialog(
+      title: "確認",
+      content: "削除しますか？",
+      cancelActionText: "いいえ",
+      defaultActionText: "はい",
+    ).show(context);
+
+    if (didRequestDelete) {
+      try {
+        await widget.database.deleteCost(widget.cost);
+        Navigator.of(context).pop();
+      } on PlatformException catch (err) {
+        PlatformExceptionAlertDialog(
+          title: "削除に失敗しました",
+          exception: err,
+        );
+      }
+    }
   }
 }
