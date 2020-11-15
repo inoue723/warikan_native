@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/utils/create_material_color.dart';
 import 'package:warikan_native/src/landing_page.dart';
@@ -38,7 +39,10 @@ class MyApp extends StatelessWidget {
       create: (context) => Auth(),
       child: MaterialApp(
         title: "warikan",
-        theme: ThemeData(primarySwatch: createMaterialColor(Color(0xFF1e68e7))),
+        theme: ThemeData(
+          primarySwatch: createMaterialColor(Color(0xFF1e68e7)),
+          fontFamily: "Noto Sans JP",
+        ),
         home: LandingPage(),
       ),
     );

@@ -9,9 +9,12 @@ import 'package:warikan_native/src/services/auth.dart';
 import 'package:warikan_native/src/services/database.dart';
 
 class EditCostPage extends StatefulWidget {
-  const EditCostPage(
-      {Key key, @required this.database, this.cost, this.myUserInfo})
-      : super(key: key);
+  const EditCostPage({
+    Key key,
+    @required this.database,
+    this.cost,
+    @required this.myUserInfo,
+  }) : super(key: key);
   final Database database;
   final Cost cost;
   final User myUserInfo;
@@ -49,10 +52,8 @@ class _EditCostPageState extends State<EditCostPage> {
   @override
   void initState() {
     super.initState();
-    // if creating
     _uid = widget.myUserInfo.uid;
 
-    // if updating
     if (widget.cost != null) {
       _uid = widget.cost.uid;
       _amount = widget.cost.amount;
