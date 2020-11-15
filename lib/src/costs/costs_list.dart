@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:warikan_native/src/common_widgets/custom_raised_buddon.dart';
 import 'package:warikan_native/src/costs/empty_content.dart';
 import 'package:warikan_native/src/invitation/bloc/invitation_bloc.dart';
 import 'package:warikan_native/src/invitation/invitation_page.dart';
-import 'package:warikan_native/src/models/cost.dart';
 import 'package:warikan_native/src/models/cost_summary.dart';
-import 'package:warikan_native/src/services/database.dart';
-import 'package:warikan_native/src/common_widgets/platfrom_exption_alert_dialog.dart';
-import 'package:flutter/services.dart';
 import 'package:warikan_native/src/costs/cost_date_list_item.dart';
 
 class CostsListContent extends StatelessWidget {
@@ -84,45 +79,10 @@ class CostsListContent extends StatelessWidget {
     );
   }
 
-  Future<void> _delete(BuildContext context, Cost cost) async {
-    try {
-      final database = Provider.of<Database>(context, listen: false);
-      await database.deleteCost(cost);
-    } on PlatformException catch (err) {
-      PlatformExceptionAlertDialog(
-        title: "削除に失敗しました",
-        exception: err,
-      );
-    }
-  }
-
   Iterable<Widget> _buildCostList(BuildContext context) {
     return List.generate(model.dateList.length, (index) {
       return CostDateListItem(dateCosts: model.dateList[index]);
     });
-    // return List.generate(
-    //   model.costs.length,
-    //   (index) {
-    //     final cost = model.costs[index];
-    //     return Dismissible(
-    //       key: Key("cost-${cost.id}"),
-    //       background: Container(
-    //         color: Colors.red,
-    //       ),
-    //       direction: DismissDirection.endToStart,
-    //       onDismissed: (direction) => _delete(context, cost),
-    //       child: ListTile(
-    //         title: Text("${cost.amount}円"),
-    //         subtitle: Text(cost.category),
-    //         trailing: Icon(Icons.chevron_right),
-    //         onTap: () => EditCostPage.show(
-    //           context,
-    //           cost: cost,
-    //         ),
-    //       ),
-    //     );
-    //   },
-    // );
   }
 
   Widget _buildSummaryLabel() {

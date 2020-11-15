@@ -32,7 +32,6 @@ dependencies:
   flutter_datetime_picker: ^1.4.0
   firebase_core: ^0.5.2
   date_format: ^1.0.9
-  google_fonts: ^1.1.1
 
 dev_dependencies:
   flutter_test:

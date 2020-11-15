@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/utils/create_material_color.dart';
 import 'package:warikan_native/src/landing_page.dart';
