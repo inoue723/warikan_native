@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:warikan_native/src/chart/chart_page.dart';
 import 'package:warikan_native/src/costs/costs_page.dart';
 import 'package:warikan_native/src/settings/setting_page.dart';
 
@@ -8,17 +9,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle = TextStyle(
-    fontSize: 30,
-    fontWeight: FontWeight.bold,
-  );
+  int _selectedIndex = 1;
   static List<Widget> _widgetOptions = <Widget>[
     CostsPage(),
-    Text(
-      '集計',
-      style: optionStyle,
-    ),
+    ChartPage(),
     SettingPage(),
   ];
 
@@ -41,7 +35,7 @@ class _HomePageState extends State<HomePage> {
             label: 'ホーム',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
+            icon: Icon(Icons.pie_chart),
             label: '分析',
           ),
           BottomNavigationBarItem(
