@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:warikan_native/src/costs/bloc/index.dart';
-import 'package:warikan_native/src/costs/costs_page.dart';
+import 'package:warikan_native/src/home/home_page.dart';
 import 'package:warikan_native/src/invitation/bloc/invitation_bloc.dart';
 import 'package:warikan_native/src/models/user.dart';
 import 'package:warikan_native/src/services/auth.dart';
@@ -49,7 +49,7 @@ class LandingPage extends StatelessWidget {
                                 : null,
                           )..add(LoadCosts());
                         },
-                        child: CostsPage(),
+                        child: HomePage(),
                       );
                     },
                   ),
