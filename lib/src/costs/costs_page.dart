@@ -7,14 +7,6 @@ import 'package:warikan_native/src/costs/empty_content.dart';
 import 'package:warikan_native/src/invitation/bloc/invitation_bloc.dart';
 import 'package:warikan_native/src/invitation/invitation_page.dart';
 
-// floatingActionButton: FloatingActionButton(
-//   backgroundColor: Theme.of(context).primaryColor,
-//   child: Icon(
-//     Icons.add,
-//     color: Colors.white,
-//   ),
-//   onPressed: () => EditCostPage.show(context, cost: null),
-// ),
 class CostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

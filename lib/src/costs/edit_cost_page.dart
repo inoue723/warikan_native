@@ -22,6 +22,13 @@ class EditCostPage extends StatefulWidget {
   final Cost cost;
   final User myUserInfo;
 
+  static Widget create(BuildContext context, {Cost cost}) {
+    final database = Provider.of<Database>(context, listen: false);
+    final myUserInfo =
+        Provider.of<AuthBase>(context, listen: false).currentUser();
+    return EditCostPage(database: database, myUserInfo: myUserInfo);
+  }
+
   static Future<void> show(BuildContext context, {Cost cost}) async {
     final database = Provider.of<Database>(context, listen: false);
     final myUserInfo =
@@ -97,7 +104,11 @@ class _EditCostPageState extends State<EditCostPage> {
         burdenRate: _burdenRate,
       );
       await widget.database.setCost(cost);
-      Navigator.of(context).pop();
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      } else {
+        // TODO: show toast successful message
+      }
     }
     setState(() {
       _isLoading = false;
@@ -124,19 +135,20 @@ class _EditCostPageState extends State<EditCostPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.cost == null ? "自分の支払いを入力" : "編集",
+                  widget.cost?.id == null ? "自分の支払いを入力" : "編集",
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    size: 32.0,
+                if (Navigator.of(context).canPop())
+                  IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      size: 32.0,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
               ],
             ),
             SingleChildScrollView(
