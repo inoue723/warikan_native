@@ -1,14 +1,11 @@
 import 'dart:async';
 
-import 'package:date_format/date_format.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:warikan_native/src/costs/bloc/costs_event.dart';
 import 'package:warikan_native/src/costs/bloc/costs_state.dart';
-import 'package:warikan_native/src/models/burden_rate.dart';
 import 'package:warikan_native/src/models/cost.dart';
-import 'package:warikan_native/src/models/cost_summary.dart';
 import 'package:warikan_native/src/services/database.dart';
 
 class CostsBloc extends Bloc<CostsEvent, CostsState> {
@@ -24,76 +21,28 @@ class CostsBloc extends Bloc<CostsEvent, CostsState> {
     if (event is LoadCosts) {
       yield* _mapLoadCostsToState();
     } else if (event is CostsUpdated) {
-      yield CostsLoaded(event.costs);
+      yield CostsLoaded(event.costs, event.partnerId);
     }
   }
 
   Stream<CostsState> _mapLoadCostsToState() async* {
     _subscription?.cancel();
     _subscription = _totalCostsStream(partnerId)
-        .listen((costs) => add(CostsUpdated(costs)));
+        .listen((costs) => add(CostsUpdated(costs, partnerId)));
   }
 
-  Stream<CostsSummary> _totalCostsStream(String partnerId) =>
+  Stream<List<Cost>> _totalCostsStream(String partnerId) =>
       CombineLatestStream([
         database.myCostsStream(),
         database.costsStream(partnerId),
-      ], _costCombiner)
-          .map(_createModels);
+      ], _costCombiner);
 
-  List<List<Cost>> _costCombiner(List<List<Cost>> values) {
+  List<Cost> _costCombiner(List<List<Cost>> values) {
     final myCosts = values[0];
     final partnerCosts = values[1];
-    return [myCosts, partnerCosts];
-  }
-
-  CostsSummary _createModels(List<List<Cost>> costsList) {
-    final myCosts = costsList[0];
-    final partnerCosts = costsList[1];
-    final flattenCosts = costsList.expand((cost) => cost).toList();
-
-    flattenCosts.sort(
-      (current, next) => next.paymentDate.compareTo(current.paymentDate),
-    );
-
-    final totalCostAmount = flattenCosts.isNotEmpty
-        ? flattenCosts
-            .map((cost) => cost.amount)
-            .reduce((value, element) => value + element)
-        : 0;
-
-    double borrowAmount = 0;
-    myCosts.forEach((myCost) {
-      borrowAmount -= myCost.amount *
-          (myCost.burdenRate?.partnerRate ?? BurdenRate.evenRate);
-    });
-    partnerCosts.forEach((partnerCost) {
-      borrowAmount += partnerCost.amount *
-          (partnerCost.burdenRate?.partnerRate ?? BurdenRate.evenRate);
-    });
-
-    List<DateCosts> dateList = [];
-    flattenCosts.forEach((cost) {
-      final formattedDate =
-          formatDate(cost.paymentDate, [yyyy, "-", mm, "-", dd]);
-      final dateCosts = dateList.firstWhere(
-        (dateCosts) => dateCosts.date == formattedDate,
-        orElse: () {
-          final newDateCosts = DateCosts(date: formattedDate);
-          dateList.add(newDateCosts);
-          return newDateCosts;
-        },
+    return [...myCosts, ...partnerCosts]..sort(
+        (current, next) => next.paymentDate.compareTo(current.paymentDate),
       );
-
-      dateCosts.costs.add(cost);
-    });
-
-    return CostsSummary(
-      costs: flattenCosts,
-      dateList: dateList,
-      totalCostAmount: totalCostAmount,
-      borrowAmount: borrowAmount.round(),
-    );
   }
 }
 

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:warikan_native/src/models/cost_summary.dart';
+import 'package:warikan_native/src/models/cost.dart';
 
 abstract class CostsEvent extends Equatable {
   const CostsEvent();
@@ -11,9 +11,10 @@ abstract class CostsEvent extends Equatable {
 class LoadCosts extends CostsEvent {}
 
 class CostsUpdated extends CostsEvent {
-  final CostsSummary costs;
+  final List<Cost> costs;
+  final String partnerId;
 
-  CostsUpdated(this.costs);
+  CostsUpdated(this.costs, this.partnerId);
 
   @override
   List<Object> get props => [costs];

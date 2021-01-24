@@ -31,8 +31,8 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'ホーム',
+            icon: Icon(Icons.list_alt_rounded),
+            label: '一覧',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart),
